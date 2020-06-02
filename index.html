@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <title>Audio</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <link rel="shortcut icon" href="/demos/logo.png">
+    <link rel="stylesheet" href="stylesheet.css">
+    <script src="menu.js"></script>
+
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script>
+        function getUrlVars() {
+            var vars = {};
+            var parts = window.location.href.replace(
+                /[?&]+([^=&]+)=([^&]*)/gi,
+                function(m, key, value) {
+                    vars[key] = value;
+                }
+            );
+            return vars;
+        }
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+
+<body>
+
+
+
+
+    <section class="make-center">
+        <input type="text" id="room-id" value="abcdef" style="display: none;">
+        <button id="open-room" style="display: none;">Stop</button>
+        <button id="join-room" style="display: none;">Leave</button>
+        <div id="d">
+        </div>
+        <div id="room-urls" style="text-align: center;display: none;background: #F1EDED;margin: 15px -10px;border: 1px solid rgb(189, 189, 189);border-left: 0;border-right: 0;"></div>
+
+        <div id="audios-container"></div>
+    </section>
+
+    <script src="RTCMultiConnection.min.js"></script>
+    <script src="adapter.js"></script>
+    <script src="socket.io.js"></script>
+
+    <link rel="stylesheet" href="getHTMLMediaElement.css">
+    <script src="getHTMLMediaElement.js"></script>
+    <script>
+        $(document).ready(function() {
+            var a = document.getElementById("d");
+            if (getUrlVars()["u"] === "start") {
+                disableInputButtons();
+                connection.open(document.getElementById('room-id').value)
+                var node2 = document.createElement("button");
+                var textnode2 = document.createTextNode("Stop");
+                node2.setAttribute("class", "btn btn-danger");
+
+                node2.appendChild(textnode2);
+                node2.onclick = function() {
+                    window.close();
+                };
+                a.appendChild(node2);
+            };
+
+            if (getUrlVars()["u"] === "join") {
+                disableInputButtons();
+                connection.join(document.getElementById('room-id').value);
+                var node2 = document.createElement("button");
+                var textnode2 = document.createTextNode("Leave");
+                node2.setAttribute("class", "btn btn-danger");
+
+                node2.appendChild(textnode2);
+                node2.onclick = function() {
+                    window.close();
+                };
+                a.appendChild(node2);
+            };
+        });
+
+
+        var connection = new RTCMultiConnection();
+        connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
+
+        connection.socketMessageEvent = 'audio-conference-demo';
+
+        connection.session = {
+            audio: true,
+            video: false
+        };
+
+        connection.mediaConstraints = {
+            audio: true,
+            video: false
+        };
+
+        connection.sdpConstraints.mandatory = {
+            OfferToReceiveAudio: true,
+            OfferToReceiveVideo: false
+        };
+
+
+
+        connection.iceServers = [{
+            'urls': [
+                'stun:stun.l.google.com:19302',
+                'stun:stun1.l.google.com:19302',
+                'stun:stun2.l.google.com:19302',
+                'stun:stun.l.google.com:19302?transport=udp',
+            ]
+        }];
+
+        connection.audiosContainer = document.getElementById('audios-container');
+        connection.onstream = function(event) {
+            var width = parseInt(connection.audiosContainer.clientWidth / 2) - 20;
+            var mediaElement = getHTMLMediaElement(event.mediaElement, {
+                title: event.userid,
+                buttons: ['full-screen'],
+                width: width,
+                showOnMouseEnter: false
+            });
+
+            connection.audiosContainer.appendChild(mediaElement);
+
+            setTimeout(function() {
+                mediaElement.media.play();
+            }, 5000);
+
+            mediaElement.id = event.streamid;
+        };
+
+        connection.onstreamended = function(event) {
+            var mediaElement = document.getElementById(event.streamid);
+            if (mediaElement) {
+                mediaElement.parentNode.removeChild(mediaElement);
+            }
+        };
+
+        function disableInputButtons() {
+            document.getElementById('open-room').disabled = true;
+            document.getElementById('join-room').disabled = true;
+            document.getElementById('room-id').disabled = true;
+        }
+
+
+        document.getElementById('room-id').value = getUrlVars()["id"];
+
+        var hashString = location.hash.replace('#', '');
+        if (hashString.length && hashString.indexOf('comment-') == 0) {
+            hashString = '';
+        }
+
+        var roomid = params.roomid;
+        if (!roomid && hashString.length) {
+            roomid = hashString;
+        }
+
+        if (roomid && roomid.length) {
+            document.getElementById('room-id').value = getUrlVars()["id"];;
+
+            // auto-join-room
+            (function reCheckRoomPresence() {
+                connection.checkPresence(roomid, function(isRoomExist) {
+                    if (isRoomExist) {
+                        connection.join(roomid);
+                        return;
+                    }
+
+                    setTimeout(reCheckRoomPresence, 5000);
+                });
+            })();
+
+            disableInputButtons();
+        }
+    </script>
+
+    <footer>
+        <small id="send-message"></small>
+    </footer>
+
+    <script src="https://www.webrtc-experiment.com/common.js"></script>
+    <div class="container">
+        <div id="chus" class="col-sm-4, col-lg-4, col-md-4">
+
+
+        </div>
+    </div>
+</body>
+
+</html>
