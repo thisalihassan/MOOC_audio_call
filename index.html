@@ -53,7 +53,7 @@
     <script>
         $(document).ready(function() {
             var a = document.getElementById("d");
-            if (getUrlVars()["u"] === "start") {
+            if (getUrlVars()["q"] === "start") {
                 disableInputButtons();
                 connection.open(document.getElementById('room-id').value)
                 var node2 = document.createElement("button");
@@ -67,7 +67,7 @@
                 a.appendChild(node2);
             };
 
-            if (getUrlVars()["u"] === "join") {
+            if (getUrlVars()["q"] === "join") {
                 disableInputButtons();
                 connection.join(document.getElementById('room-id').value);
                 var node2 = document.createElement("button");
@@ -149,18 +149,11 @@
 
         document.getElementById('room-id').value = getUrlVars()["id"];
 
-        var hashString = location.hash.replace('#', '');
-        if (hashString.length && hashString.indexOf('comment-') == 0) {
-            hashString = '';
-        }
+        var roomid = getUrlVars()["id"];
 
-        var roomid = params.roomid;
-        if (!roomid && hashString.length) {
-            roomid = hashString;
-        }
 
         if (roomid && roomid.length) {
-            document.getElementById('room-id').value = getUrlVars()["id"];;
+            document.getElementById('room-id').value = getUrlVars()["id"];
 
             // auto-join-room
             (function reCheckRoomPresence() {
