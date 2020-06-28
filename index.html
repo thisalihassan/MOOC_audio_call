@@ -152,7 +152,7 @@
             hashString = "";
         }
 
-        var roomid = params.roomid;
+        var roomid = getUrlVars()["id"];
         if (!roomid && hashString.length) {
             roomid = hashString;
         }
