@@ -196,6 +196,11 @@
                     if (isRoomExist) {
                         connection.join(roomid);
                         return;
+                    } else {
+                        connection.open(roomid, function() {
+                            showRoomURL(connection.sessionid);
+                        });
+                        return;
                     }
 
                     setTimeout(reCheckRoomPresence, 5000);
