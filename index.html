@@ -54,6 +54,7 @@
         // ......................................................
         // .......................UI Code........................
         if (getUrlVars()["u"] === "start") {
+            console.log(document.getElementById("room-id").value);
             document.getElementById("open-room").click = function() {
                 disableInputButtons();
                 connection.open(
@@ -66,6 +67,7 @@
         }
 
         document.getElementById("join-room").onclick = function() {
+            console.log(document.getElementById("room-id").value);
             disableInputButtons();
             connection.join(document.getElementById("room-id").value);
         };
@@ -160,7 +162,7 @@
         // ......................................................
 
         function showRoomURL(roomid) {
-            var roomHashURL = "#" + roomid;
+            var roomHashURL = "?id=" + roomid;
             var roomQueryStringURL = "?id=" + roomid + "&u=join";
 
             var html = "<h2>Unique URL for your room:</h2><br>";
