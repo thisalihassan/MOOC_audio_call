@@ -24,10 +24,10 @@
 
 <body>
     <section class="make-center">
-        <input style="display: none;" type="text" id="room-id" value="abcdef" autocorrect="off" autocapitalize="off" size="20" />
-        <button style="display: none;" id="open-room">Open Room</button>
-        <button style="display: none;" id="join-room">Join Room</button>
-        <button style="display: none;" id="open-or-join-room">
+        <input type="text" id="room-id" value="abcdef" autocorrect="off" autocapitalize="off" size="20" />
+        <button id="open-room">Open Room</button>
+        <button id="join-room">Join Room</button>
+        <button id="open-or-join-room">
         Auto Open Or Join Room
       </button>
 
@@ -53,18 +53,14 @@
     <script>
         // ......................................................
         // .......................UI Code........................
-        if (getUrlVars()["u"] === "start") {
-            console.log(document.getElementById("room-id").value);
-            document.getElementById("open-room").click = function() {
-                disableInputButtons();
-                connection.open(
-                    document.getElementById("room-id").value,
-                    function() {
-                        showRoomURL(connection.sessionid);
-                    }
-                );
-            };
-        }
+
+        console.log(document.getElementById("room-id").value);
+        document.getElementById("open-room").onclick = function() {
+            disableInputButtons();
+            connection.open(document.getElementById("room-id").value, function() {
+                showRoomURL(connection.sessionid);
+            });
+        };
 
         document.getElementById("join-room").onclick = function() {
             console.log(document.getElementById("room-id").value);
@@ -187,20 +183,6 @@
             roomURLsDiv.style.display = "block";
         }
 
-        (function() {
-            var params = {},
-                r = /([^&=]+)=?([^&]*)/g;
-
-            function d(s) {
-                return decodeURIComponent(s.replace(/\+/g, " "));
-            }
-            var match,
-                search = window.location.search;
-            while ((match = r.exec(search.substring(1))))
-                params[d(match[1])] = d(match[2]);
-            window.params = params;
-        })();
-
         var roomid = "";
         if (localStorage.getItem(connection.socketMessageEvent)) {
             roomid = localStorage.getItem(connection.socketMessageEvent);
@@ -213,7 +195,8 @@
         };
 
         var roomid = getUrlVars()["id"];
-
+        console.log(roomid);
+        console.log("roomid");
         if (roomid && roomid.length) {
             document.getElementById("room-id").value = roomid;
             localStorage.setItem(connection.socketMessageEvent, roomid);
