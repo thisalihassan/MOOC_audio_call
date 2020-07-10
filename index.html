@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Audio Conferencing using RTCMultiConnection</title>
+    <title>MOOC Audio Conference Call</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0" />
     <link rel="shortcut icon" href="/demos/logo.png" />
     <link rel="stylesheet" href="stylesheet.css" />
@@ -23,18 +23,13 @@
 </head>
 
 <body>
-    <h1>
-        Audio Conferencing using RTCMultiConnection
-        <p class="no-mobile">
-            Multi-user (many-to-many) audio-calling using mesh networking model.
-        </p>
-    </h1>
-
     <section class="make-center">
         <input type="text" id="room-id" value="abcdef" autocorrect="off" autocapitalize="off" size="20" />
         <button id="open-room">Open Room</button>
-        <button id="join-room">Join Room</button>
-        <button id="open-or-join-room">Auto Open Or Join Room</button>
+        <button id="join-room" style="display: none;">Join Room</button>
+        <button id="open-or-join-room" style="display: none;">
+        Auto Open Or Join Room
+      </button>
 
         <div id="room-urls" style="
           text-align: center;
@@ -186,33 +181,11 @@
             roomURLsDiv.style.display = "block";
         }
 
-        // (function() {
-        //     var params = {},
-        //         r = /([^&=]+)=?([^&]*)/g;
-
-        //     function d(s) {
-        //         return decodeURIComponent(s.replace(/\+/g, " "));
-        //     }
-        //     var match,
-        //         search = window.location.search;
-        //     while ((match = r.exec(search.substring(1))))
-        //         params[d(match[1])] = d(match[2]);
-        //     window.params = params;
-        // })();
-
         var roomid = connection.token();
 
-        document.getElementById("room-id").value = roomid;
-
-        var hashString = location.hash.replace("#", "");
-        if (hashString.length && hashString.indexOf("comment-") == 0) {
-            hashString = "";
-        }
+        document.getElementById("room-id").value = getUrlVars()["roomid"];
 
         var roomid = getUrlVars()["roomid"];
-        if (!roomid && hashString.length) {
-            roomid = hashString;
-        }
 
         if (roomid && roomid.length) {
             document.getElementById("room-id").value = roomid;
