@@ -60,26 +60,27 @@
                 showRoomURL(connection.sessionid);
             });
         };
-        if (getUrlVars()["u"] === "start") {
-            document.getElementById("open-room").click();
-        }
-        document.getElementById("join-room").onclick = function() {
-            disableInputButtons();
-            connection.join(document.getElementById("room-id").value);
-        };
+        $(document).ready(function() {
+            if (getUrlVars()["u"] === "start") {
+                document.getElementById("open-room").click();
+            }
+            document.getElementById("join-room").onclick = function() {
+                disableInputButtons();
+                connection.join(document.getElementById("room-id").value);
+            };
 
-        document.getElementById("open-or-join-room").onclick = function() {
-            disableInputButtons();
-            connection.openOrJoin(
-                document.getElementById("room-id").value,
-                function(isRoomExist, roomid) {
-                    if (!isRoomExist) {
-                        showRoomURL(roomid);
+            document.getElementById("open-or-join-room").onclick = function() {
+                disableInputButtons();
+                connection.openOrJoin(
+                    document.getElementById("room-id").value,
+                    function(isRoomExist, roomid) {
+                        if (!isRoomExist) {
+                            showRoomURL(roomid);
+                        }
                     }
-                }
-            );
-        };
-
+                );
+            };
+        });
         // ......................................................
         // ..................RTCMultiConnection Code.............
         // ......................................................
@@ -201,7 +202,7 @@
                             return;
                         }
 
-                        setTimeout(reCheckRoomPresence, 5000);
+                        setTimeout(reCheckRoomPresence, 3000);
                     });
                 })();
             }
