@@ -52,18 +52,17 @@
     <link rel="stylesheet" href="getHTMLMediaElement.css" />
     <script src="getHTMLMediaElement.js"></script>
     <script>
-        // ......................................................
-        // .......................UI Code........................
-        // ......................................................
-        document.getElementById("open-room").onclick = function() {
-            disableInputButtons();
-            connection.open(document.getElementById("room-id").value, function() {
-                showRoomURL(connection.sessionid);
-            });
-        };
+        document.getElementById("room-id").value = getUrlVars()["roomid"];
+
         $(document).ready(function() {
             if (getUrlVars()["u"] === "start") {
-                document.getElementById("open-room").click();
+                disableInputButtons();
+                connection.open(
+                    document.getElementById("room-id").value,
+                    function() {
+                        showRoomURL(connection.sessionid);
+                    }
+                );
             }
             document.getElementById("join-room").onclick = function() {
                 disableInputButtons();
