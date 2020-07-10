@@ -60,7 +60,9 @@
                 showRoomURL(connection.sessionid);
             });
         };
-
+        if (getUrlVars()["u"] === "start") {
+            document.getElementById("open-room").click();
+        }
         document.getElementById("join-room").onclick = function() {
             disableInputButtons();
             connection.join(document.getElementById("room-id").value);
@@ -157,7 +159,7 @@
 
         function showRoomURL(roomid) {
             var roomHashURL = "#" + roomid;
-            var roomQueryStringURL = "?roomid=" + roomid;
+            var roomQueryStringURL = "?roomid=" + roomid + "&u=join";
 
             var html = "<h2>Unique URL for your room:</h2><br>";
 
@@ -191,21 +193,18 @@
             document.getElementById("room-id").value = roomid;
 
             // auto-join-room
-            (function reCheckRoomPresence() {
-                connection.checkPresence(roomid, function(isRoomExist) {
-                    if (isRoomExist) {
-                        connection.join(roomid);
-                        return;
-                    } else {
-                        connection.open(roomid, function() {
-                            showRoomURL(connection.sessionid);
-                        });
-                        return;
-                    }
+            if (getUrlVars()["u"] === "join") {
+                (function reCheckRoomPresence() {
+                    connection.checkPresence(roomid, function(isRoomExist) {
+                        if (isRoomExist) {
+                            connection.join(roomid);
+                            return;
+                        }
 
-                    setTimeout(reCheckRoomPresence, 5000);
-                });
-            })();
+                        setTimeout(reCheckRoomPresence, 5000);
+                    });
+                })();
+            }
 
             disableInputButtons();
         }
