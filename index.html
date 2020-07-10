@@ -150,7 +150,7 @@
 
         function showRoomURL(roomid) {
             var roomHashURL = "#" + roomid;
-            var roomQueryStringURL = "?roomid=";
+            var roomQueryStringURL = "?roomid=" + roomid;
 
             var html = "<h2>Unique URL for your room:</h2><br>";
 
@@ -188,16 +188,9 @@
             window.params = params;
         })();
 
-        var roomid = "";
-        if (localStorage.getItem(connection.socketMessageEvent)) {
-            roomid = localStorage.getItem(connection.socketMessageEvent);
-        } else {
-            roomid = connection.token();
-        }
+        var roomid = connection.token();
+
         document.getElementById("room-id").value = roomid;
-        document.getElementById("room-id").onkeyup = function() {
-            localStorage.setItem(connection.socketMessageEvent, this.value);
-        };
 
         var hashString = location.hash.replace("#", "");
         if (hashString.length && hashString.indexOf("comment-") == 0) {
@@ -211,7 +204,6 @@
 
         if (roomid && roomid.length) {
             document.getElementById("room-id").value = roomid;
-            localStorage.setItem(connection.socketMessageEvent, roomid);
 
             // auto-join-room
             (function reCheckRoomPresence() {
