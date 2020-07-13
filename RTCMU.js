@@ -23,7 +23,7 @@ var RTCMultiConnection = function (roomid, forceOptions) {
       }
     );
     console.log(vars["n"]);
-    connection.userId = vars["n"];
+    connection.userid = vars["n"];
     function isData(session) {
       return (
         !session.audio && !session.video && !session.screen && session.data
