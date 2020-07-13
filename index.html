@@ -124,7 +124,7 @@
         connection.audiosContainer = document.getElementById("audios-container");
         connection.onstream = function(event) {
             var width = parseInt(connection.audiosContainer.clientWidth / 2) - 20;
-
+            console.log(event)
             var mediaElement = getHTMLMediaElement(event.mediaElement, {
                 title: event.userid,
                 buttons: ["full-screen"],
