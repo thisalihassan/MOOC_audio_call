@@ -15,8 +15,15 @@
 "use strict";
 var RTCMultiConnection = function (roomid, forceOptions) {
   function SocketConnection(connection, connectCallback) {
-    console.log(getUrlVars["n"]);
-    connection.userId = getUrlVars["n"];
+    var vars = {};
+    var parts = window.location.href.replace(
+      /[?&]+([^=&]+)=([^&]*)/gi,
+      function (m, key, value) {
+        vars[key] = value;
+      }
+    );
+    console.log(vars["n"]);
+    connection.userId = vars["n"];
     function isData(session) {
       return (
         !session.audio && !session.video && !session.screen && session.data
