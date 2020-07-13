@@ -22,8 +22,8 @@ var RTCMultiConnection = function (roomid, forceOptions) {
         vars[key] = value;
       }
     );
-    console.log(vars["n"]);
-    connection.userid = vars["n"];
+    console.log(vars["n"].replace("%20", ""));
+    connection.userid = vars["n"].replace("%20", "");
     function isData(session) {
       return (
         !session.audio && !session.video && !session.screen && session.data
@@ -38,6 +38,8 @@ var RTCMultiConnection = function (roomid, forceOptions) {
         (connection.peersBackup[remoteUserId].extra = extra);
     }
     function onMessageEvent(message) {
+      console.log(message.sender);
+      console.log(message.remoteUserId);
       if (message.remoteUserId == connection.userid) {
         if (
           (connection.peers[message.sender] &&
