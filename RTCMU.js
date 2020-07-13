@@ -5,7 +5,6 @@
 // _________________________
 // RTCMultiConnection v3.6.9
 
-
 "use strict";
 var RTCMultiConnection = function (roomid, forceOptions) {
   function SocketConnection(connection, connectCallback) {
@@ -39,12 +38,12 @@ var RTCMultiConnection = function (roomid, forceOptions) {
           (connection.peers[message.sender] &&
             connection.peers[message.sender].extra != message.message.extra &&
             ((connection.peers[message.sender].extra = message.extra),
-              connection.onExtraDataUpdated({
-                userid: message.sender,
-                extra: message.extra,
-              }),
-              updateExtraBackup(message.sender, message.extra)),
-            message.message.streamSyncNeeded && connection.peers[message.sender])
+            connection.onExtraDataUpdated({
+              userid: message.sender,
+              extra: message.extra,
+            }),
+            updateExtraBackup(message.sender, message.extra)),
+          message.message.streamSyncNeeded && connection.peers[message.sender])
         ) {
           var stream = connection.streamEvents[message.message.streamid];
           if (!stream || !stream.stream) return;
@@ -56,7 +55,7 @@ var RTCMultiConnection = function (roomid, forceOptions) {
           )
             return (
               connection.peersBackup[stream.userid] &&
-              (stream.extra = connection.peersBackup[stream.userid].extra),
+                (stream.extra = connection.peersBackup[stream.userid].extra),
               void connection.onstreamended(stream)
             );
           var type =
@@ -71,7 +70,7 @@ var RTCMultiConnection = function (roomid, forceOptions) {
         if (message.message.allParticipants)
           return (
             message.message.allParticipants.indexOf(message.sender) === -1 &&
-            message.message.allParticipants.push(message.sender),
+              message.message.allParticipants.push(message.sender),
             void message.message.allParticipants.forEach(function (
               participant
             ) {
@@ -132,7 +131,7 @@ var RTCMultiConnection = function (roomid, forceOptions) {
           message.message.readyForOffer &&
           (connection.attachStreams.length &&
             (connection.waitingForLocalMedia = !1),
-            connection.waitingForLocalMedia)
+          connection.waitingForLocalMedia)
         )
           return void setTimeout(function () {
             onMessageEvent(message);
@@ -165,7 +164,7 @@ var RTCMultiConnection = function (roomid, forceOptions) {
               "undefined" != typeof message.message.isOneWay
                 ? message.message.isOneWay
                 : !!connection.session.oneway ||
-                "one-way" === connection.direction,
+                  "one-way" === connection.direction,
             isDataOnly:
               "undefined" != typeof message.message.isDataOnly
                 ? message.message.isDataOnly
@@ -174,10 +173,10 @@ var RTCMultiConnection = function (roomid, forceOptions) {
               "undefined" != typeof message.message.isOneWay
                 ? message.message.isOneWay
                 : !!connection.session.oneway ||
-                "one-way" === connection.direction,
+                  "one-way" === connection.direction,
             dontAttachLocalStream: !!message.message.dontGetRemoteStream,
             connectionDescription: message,
-            successCallback: function () { },
+            successCallback: function () {},
           };
           return void connection.onNewParticipant(
             message.sender,
@@ -186,9 +185,9 @@ var RTCMultiConnection = function (roomid, forceOptions) {
         }
         return (
           message.message.changedUUID &&
-          connection.peers[message.message.oldUUID] &&
-          ((connection.peers[message.message.newUUID] =
-            connection.peers[message.message.oldUUID]),
+            connection.peers[message.message.oldUUID] &&
+            ((connection.peers[message.message.newUUID] =
+              connection.peers[message.message.oldUUID]),
             delete connection.peers[message.message.oldUUID]),
           message.message.userLeft
             ? (mPeer.onUserLeft(message.sender),
@@ -210,18 +209,18 @@ var RTCMultiConnection = function (roomid, forceOptions) {
       (parameters +=
         "&maxParticipantsAllowed=" + connection.maxParticipantsAllowed),
       connection.enableScalableBroadcast &&
-      ((parameters += "&enableScalableBroadcast=true"),
+        ((parameters += "&enableScalableBroadcast=true"),
         (parameters +=
           "&maxRelayLimitPerUser=" + (connection.maxRelayLimitPerUser || 2))),
       (parameters += "&extra=" + JSON.stringify(connection.extra || {})),
       connection.socketCustomParameters &&
-      (parameters += connection.socketCustomParameters);
+        (parameters += connection.socketCustomParameters);
     try {
       io.sockets = {};
-    } catch (e) { }
+    } catch (e) {}
     if (
       (connection.socketURL || (connection.socketURL = "/"),
-        "/" != connection.socketURL.substr(connection.socketURL.length - 1, 1))
+      "/" != connection.socketURL.substr(connection.socketURL.length - 1, 1))
     )
       throw '"socketURL" MUST end with a slash.';
     connection.enableLogs &&
@@ -240,8 +239,8 @@ var RTCMultiConnection = function (roomid, forceOptions) {
     connection.socket.on("extra-data-updated", function (remoteUserId, extra) {
       connection.peers[remoteUserId] &&
         ((connection.peers[remoteUserId].extra = extra),
-          connection.onExtraDataUpdated({ userid: remoteUserId, extra: extra }),
-          updateExtraBackup(remoteUserId, extra));
+        connection.onExtraDataUpdated({ userid: remoteUserId, extra: extra }),
+        updateExtraBackup(remoteUserId, extra));
     }),
       connection.socket.on(connection.socketMessageEvent, onMessageEvent);
     var alreadyConnected = !1;
@@ -251,12 +250,12 @@ var RTCMultiConnection = function (roomid, forceOptions) {
       connection.socket.on("connect", function () {
         alreadyConnected ||
           ((alreadyConnected = !0),
-            connection.enableLogs &&
+          connection.enableLogs &&
             console.info("socket.io connection is opened."),
-            setTimeout(function () {
-              connection.socket.emit("extra-data-updated", connection.extra);
-            }, 1e3),
-            connectCallback && connectCallback(connection.socket));
+          setTimeout(function () {
+            connection.socket.emit("extra-data-updated", connection.extra);
+          }, 1e3),
+          connectCallback && connectCallback(connection.socket));
       }),
       connection.socket.on("disconnect", function (event) {
         connection.onSocketDisconnect(event);
@@ -273,7 +272,7 @@ var RTCMultiConnection = function (roomid, forceOptions) {
               ? connection.peers[remoteUserId].extra || {}
               : {},
           }),
-            connection.deletePeer(remoteUserId));
+          connection.deletePeer(remoteUserId));
       }),
       connection.socket.on("user-connected", function (userid) {
         userid !== connection.userid &&
@@ -388,8 +387,8 @@ var RTCMultiConnection = function (roomid, forceOptions) {
           if (remoteUser)
             return remoteUser.channels.length
               ? void remoteUser.channels.forEach(function (channel) {
-                channel.send(data);
-              })
+                  channel.send(data);
+                })
               : (connection.peers[remoteUserId].createDataChannel(),
                 connection.renegotiate(remoteUserId),
                 void setTimeout(function () {
@@ -399,8 +398,8 @@ var RTCMultiConnection = function (roomid, forceOptions) {
         this.getAllParticipants().forEach(function (participant) {
           return that[participant].channels.length
             ? void that[participant].channels.forEach(function (channel) {
-              channel.send(data);
-            })
+                channel.send(data);
+              })
             : (connection.peers[participant].createDataChannel(),
               connection.renegotiate(participant),
               void setTimeout(function () {
@@ -440,7 +439,7 @@ var RTCMultiConnection = function (roomid, forceOptions) {
                 localCandidate
               )),
                 localCandidate &&
-                self.onNegotiationNeeded(localCandidate, remoteUserId);
+                  self.onNegotiationNeeded(localCandidate, remoteUserId);
             },
             remoteSdp: remoteSdp,
             onDataChannelMessage: function (message) {
@@ -448,19 +447,19 @@ var RTCMultiConnection = function (roomid, forceOptions) {
                 (!connection.fbr &&
                   connection.enableFileSharing &&
                   initFileBufferReader(),
-                  "string" == typeof message || !connection.enableFileSharing)
+                "string" == typeof message || !connection.enableFileSharing)
               )
                 return void self.onDataChannelMessage(message, remoteUserId);
               var that = this;
               return message instanceof ArrayBuffer ||
                 message instanceof DataView
                 ? void connection.fbr.convertToObject(message, function (
-                  object
-                ) {
-                  that.onDataChannelMessage(object);
-                })
+                    object
+                  ) {
+                    that.onDataChannelMessage(object);
+                  })
                 : message.readyForNextChunk
-                  ? void connection.fbr.getNextChunk(
+                ? void connection.fbr.getNextChunk(
                     message,
                     function (nextChunk, isLastChunk) {
                       connection.peers[remoteUserId].channels.forEach(function (
@@ -471,15 +470,15 @@ var RTCMultiConnection = function (roomid, forceOptions) {
                     },
                     remoteUserId
                   )
-                  : message.chunkMissing
-                    ? void connection.fbr.chunkMissing(message)
-                    : void connection.fbr.addChunk(message, function (
+                : message.chunkMissing
+                ? void connection.fbr.chunkMissing(message)
+                : void connection.fbr.addChunk(message, function (
+                    promptNextChunk
+                  ) {
+                    connection.peers[remoteUserId].peer.channel.send(
                       promptNextChunk
-                    ) {
-                      connection.peers[remoteUserId].peer.channel.send(
-                        promptNextChunk
-                      );
-                    });
+                    );
+                  });
             },
             onDataChannelError: function (error) {
               self.onDataChannelError(error, remoteUserId);
@@ -501,11 +500,11 @@ var RTCMultiConnection = function (roomid, forceOptions) {
             onPeerStateChanged: function (states) {
               self.onPeerStateChanged(states),
                 "new" === states.iceConnectionState &&
-                self.onNegotiationStarted(remoteUserId, states),
+                  self.onNegotiationStarted(remoteUserId, states),
                 "connected" === states.iceConnectionState &&
-                self.onNegotiationCompleted(remoteUserId, states),
+                  self.onNegotiationCompleted(remoteUserId, states),
                 states.iceConnectionState.search(/closed|failed/gi) !== -1 &&
-                (self.onUserLeft(remoteUserId),
+                  (self.onUserLeft(remoteUserId),
                   self.disconnectWith(remoteUserId));
             },
           }
@@ -520,14 +519,14 @@ var RTCMultiConnection = function (roomid, forceOptions) {
         ) {
           if (
             ((userPreferences = userPreferences || {}),
-              connection.isInitiator &&
+            connection.isInitiator &&
               connection.session.audio &&
               "two-way" === connection.session.audio &&
               !userPreferences.streamsToShare &&
               ((userPreferences.isOneWay = !1),
-                (userPreferences.isDataOnly = !1),
-                (userPreferences.session = connection.session)),
-              !userPreferences.isOneWay && !userPreferences.isDataOnly)
+              (userPreferences.isDataOnly = !1),
+              (userPreferences.session = connection.session)),
+            !userPreferences.isOneWay && !userPreferences.isDataOnly)
           )
             return (
               (userPreferences.isOneWay = !0),
@@ -574,8 +573,8 @@ var RTCMultiConnection = function (roomid, forceOptions) {
             connection.enableLogs &&
             console.error(
               "Peer (" +
-              remoteUserId +
-              ") does not exist. Renegotiation skipped."
+                remoteUserId +
+                ") does not exist. Renegotiation skipped."
             )
           );
         userPreferences || (userPreferences = {}),
@@ -597,31 +596,31 @@ var RTCMultiConnection = function (roomid, forceOptions) {
           "function" == typeof peer.getSenders &&
           peer.getSenders().length
           ? void peer.getSenders().forEach(function (rtpSender) {
-            isVideoTrack &&
-              "video" === rtpSender.track.kind &&
-              ((connection.peers[remoteUserId].peer.lastVideoTrack =
-                rtpSender.track),
+              isVideoTrack &&
+                "video" === rtpSender.track.kind &&
+                ((connection.peers[remoteUserId].peer.lastVideoTrack =
+                  rtpSender.track),
                 rtpSender.replaceTrack(track)),
-              isVideoTrack ||
-              "audio" !== rtpSender.track.kind ||
-              ((connection.peers[remoteUserId].peer.lastAudioTrack =
-                rtpSender.track),
-                rtpSender.replaceTrack(track));
-          })
+                isVideoTrack ||
+                  "audio" !== rtpSender.track.kind ||
+                  ((connection.peers[remoteUserId].peer.lastAudioTrack =
+                    rtpSender.track),
+                  rtpSender.replaceTrack(track));
+            })
           : (console.warn("RTPSender.replaceTrack is NOT supported."),
             void this.renegotiatePeer(remoteUserId));
       }),
-      (this.onNegotiationNeeded = function (message, remoteUserId) { }),
+      (this.onNegotiationNeeded = function (message, remoteUserId) {}),
       (this.addNegotiatedMessage = function (message, remoteUserId) {
         if (message.type && message.sdp)
           return (
             "answer" == message.type &&
-            connection.peers[remoteUserId] &&
-            connection.peers[remoteUserId].addRemoteSdp(message),
+              connection.peers[remoteUserId] &&
+              connection.peers[remoteUserId].addRemoteSdp(message),
             "offer" == message.type &&
-            (message.renegotiatingPeer
-              ? this.renegotiatePeer(remoteUserId, null, message)
-              : this.createAnsweringPeer(message, remoteUserId)),
+              (message.renegotiatingPeer
+                ? this.renegotiatePeer(remoteUserId, null, message)
+                : this.createAnsweringPeer(message, remoteUserId)),
             void (
               connection.enableLogs &&
               console.log("Remote peer's sdp:", message.sdp)
@@ -630,7 +629,7 @@ var RTCMultiConnection = function (roomid, forceOptions) {
         if (message.candidate)
           return (
             connection.peers[remoteUserId] &&
-            connection.peers[remoteUserId].addRemoteCandidate(message),
+              connection.peers[remoteUserId].addRemoteCandidate(message),
             void (
               connection.enableLogs &&
               console.log("Remote peer's candidate pairs:", message.candidate)
@@ -640,11 +639,11 @@ var RTCMultiConnection = function (roomid, forceOptions) {
           (connection.session =
             message.userPreferences.session || connection.session),
             connection.session.oneway &&
-            connection.attachStreams.length &&
-            (connection.attachStreams = []),
+              connection.attachStreams.length &&
+              (connection.attachStreams = []),
             message.userPreferences.isDataOnly &&
-            connection.attachStreams.length &&
-            (connection.attachStreams.length = []);
+              connection.attachStreams.length &&
+              (connection.attachStreams.length = []);
           var streamsToShare = {};
           connection.attachStreams.forEach(function (stream) {
             streamsToShare[stream.streamid] = {
@@ -662,9 +661,9 @@ var RTCMultiConnection = function (roomid, forceOptions) {
         message.readyForOffer &&
           connection.onReadyForOffer(remoteUserId, message.userPreferences);
       }),
-      (this.onGettingRemoteMedia = function (stream, remoteUserId) { }),
-      (this.onRemovingRemoteMedia = function (stream, remoteUserId) { }),
-      (this.onGettingLocalMedia = function (localStream) { }),
+      (this.onGettingRemoteMedia = function (stream, remoteUserId) {}),
+      (this.onRemovingRemoteMedia = function (stream, remoteUserId) {}),
+      (this.onGettingLocalMedia = function (localStream) {}),
       (this.onLocalMediaError = function (error, constraints) {
         connection.onMediaError(error, constraints);
       }),
@@ -737,8 +736,8 @@ var RTCMultiConnection = function (roomid, forceOptions) {
       (this.onPeerStateChanged = function (state) {
         connection.onPeerStateChanged(state);
       }),
-      (this.onNegotiationStarted = function (remoteUserId, states) { }),
-      (this.onNegotiationCompleted = function (remoteUserId, states) { }),
+      (this.onNegotiationStarted = function (remoteUserId, states) {}),
+      (this.onNegotiationCompleted = function (remoteUserId, states) {}),
       (this.getRemoteStreams = function (remoteUserId) {
         return (
           (remoteUserId =
@@ -794,18 +793,18 @@ var RTCMultiConnection = function (roomid, forceOptions) {
         },
         !1
       ),
-        streamEvent.stream.addEventListener(
-          "unmute",
-          function (event) {
-            (event = connection.streamEvents[streamEvent.streamid]),
-              (event.session = {
-                audio: "audio" === event.unmuteType,
-                video: "video" === event.unmuteType,
-              }),
-              connection.onunmute(event);
-          },
-          !1
-        ));
+      streamEvent.stream.addEventListener(
+        "unmute",
+        function (event) {
+          (event = connection.streamEvents[streamEvent.streamid]),
+            (event.session = {
+              audio: "audio" === event.unmuteType,
+              video: "video" === event.unmuteType,
+            }),
+            connection.onunmute(event);
+        },
+        !1
+      ));
   }
   function getRandomString() {
     if (
@@ -815,9 +814,9 @@ var RTCMultiConnection = function (roomid, forceOptions) {
     ) {
       for (
         var a = window.crypto.getRandomValues(new Uint32Array(3)),
-        token = "",
-        i = 0,
-        l = a.length;
+          token = "",
+          i = 0,
+          l = a.length;
         i < l;
         i++
       )
@@ -836,17 +835,17 @@ var RTCMultiConnection = function (roomid, forceOptions) {
       stream.isScreen ||
       (isAudioOnly = !0),
       "Firefox" === DetectRTC.browser.name &&
-      (connection.session.video || connection.session.screen) &&
-      (isAudioOnly = !1);
+        (connection.session.video || connection.session.screen) &&
+        (isAudioOnly = !1);
     var mediaElement = document.createElement(isAudioOnly ? "audio" : "video");
     if (
       ((mediaElement.srcObject = stream),
-        mediaElement.setAttribute("autoplay", !0),
-        mediaElement.setAttribute("playsinline", !0),
-        mediaElement.setAttribute("controls", !0),
-        mediaElement.setAttribute("muted", !1),
-        mediaElement.setAttribute("volume", 1),
-        "Firefox" === DetectRTC.browser.name)
+      mediaElement.setAttribute("autoplay", !0),
+      mediaElement.setAttribute("playsinline", !0),
+      mediaElement.setAttribute("controls", !0),
+      mediaElement.setAttribute("muted", !1),
+      mediaElement.setAttribute("volume", 1),
+      "Firefox" === DetectRTC.browser.name)
     ) {
       var streamEndedEvent = "ended";
       "oninactive" in mediaElement && (streamEndedEvent = "inactive"),
@@ -855,7 +854,7 @@ var RTCMultiConnection = function (roomid, forceOptions) {
           function () {
             if (
               (currentUserMediaRequest.remove(stream.idInstance),
-                "local" === stream.type)
+              "local" === stream.type)
             ) {
               (streamEndedEvent = "ended"),
                 "oninactive" in stream && (streamEndedEvent = "inactive"),
@@ -888,9 +887,9 @@ var RTCMultiConnection = function (roomid, forceOptions) {
           .then(function () {
             cbFired || ((cbFired = !0), callback(mediaElement));
           })
-        ["catch"](function (error) {
-          cbFired || ((cbFired = !0), callback(mediaElement));
-        });
+          ["catch"](function (error) {
+            cbFired || ((cbFired = !0), callback(mediaElement));
+          });
     } else callback(mediaElement);
   }
   function listenEventHandler(eventName, eventHandler) {
@@ -935,8 +934,8 @@ var RTCMultiConnection = function (roomid, forceOptions) {
   function getTracks(stream, kind) {
     return stream && stream.getTracks
       ? stream.getTracks().filter(function (t) {
-        return t.kind === (kind || "audio");
-      })
+          return t.kind === (kind || "audio");
+        })
       : [];
   }
   function isUnifiedPlanSupportedDefault() {
@@ -947,7 +946,7 @@ var RTCMultiConnection = function (roomid, forceOptions) {
       var tempPc = new RTCPeerConnection();
       try {
         tempPc.addTransceiver("audio"), (canAddTransceiver = !0);
-      } catch (e) { }
+      } catch (e) {}
       tempPc.close();
     } catch (e) {
       canAddTransceiver = !1;
@@ -987,9 +986,9 @@ var RTCMultiConnection = function (roomid, forceOptions) {
           iosrtc.getUserMedia),
         iosrtc.debug.enable("iosrtc*"),
         "function" == typeof iosrtc.selectAudioOutput &&
-        iosrtc.selectAudioOutput(
-          window.iOSDefaultAudioOutputDevice || "speaker"
-        ),
+          iosrtc.selectAudioOutput(
+            window.iOSDefaultAudioOutputDevice || "speaker"
+          ),
         iosrtc.registerGlobals();
     }
   }
@@ -1040,7 +1039,7 @@ var RTCMultiConnection = function (roomid, forceOptions) {
                     extra: connection ? connection.extra : {},
                     streamsToShare: streamsToShare,
                   }),
-                    connection.onSettingLocalDescription(self));
+                  connection.onSettingLocalDescription(self));
               },
               function (error) {
                 connection.enableLogs &&
@@ -1057,14 +1056,14 @@ var RTCMultiConnection = function (roomid, forceOptions) {
       ("undefined" != typeof window.RTCPeerConnection
         ? (RTCPeerConnection = window.RTCPeerConnection)
         : "undefined" != typeof mozRTCPeerConnection
-          ? (RTCPeerConnection = mozRTCPeerConnection)
-          : "undefined" != typeof webkitRTCPeerConnection &&
+        ? (RTCPeerConnection = mozRTCPeerConnection)
+        : "undefined" != typeof webkitRTCPeerConnection &&
           (RTCPeerConnection = webkitRTCPeerConnection),
-        (RTCSessionDescription =
-          window.RTCSessionDescription || window.mozRTCSessionDescription),
-        (RTCIceCandidate = window.RTCIceCandidate || window.mozRTCIceCandidate),
-        (MediaStreamTrack = window.MediaStreamTrack),
-        !RTCPeerConnection)
+      (RTCSessionDescription =
+        window.RTCSessionDescription || window.mozRTCSessionDescription),
+      (RTCIceCandidate = window.RTCIceCandidate || window.mozRTCIceCandidate),
+      (MediaStreamTrack = window.MediaStreamTrack),
+      !RTCPeerConnection)
     )
       throw "WebRTC 1.0 (RTCPeerConnection) API are NOT available in this browser.";
     var connection = config.rtcMultiConnection;
@@ -1096,7 +1095,7 @@ var RTCMultiConnection = function (roomid, forceOptions) {
       (connection.attachStreams.forEach(function (stream) {
         stream && localStreams.push(stream);
       }),
-        renegotiatingPeer)
+      renegotiatingPeer)
     )
       peer = config.peerRef;
     else {
@@ -1114,13 +1113,13 @@ var RTCMultiConnection = function (roomid, forceOptions) {
         "undefined" != typeof connection.iceCandidatePoolSize &&
           (params.iceCandidatePoolSize = connection.iceCandidatePoolSize),
           "undefined" != typeof connection.bundlePolicy &&
-          (params.bundlePolicy = connection.bundlePolicy),
+            (params.bundlePolicy = connection.bundlePolicy),
           "undefined" != typeof connection.rtcpMuxPolicy &&
-          (params.rtcpMuxPolicy = connection.rtcpMuxPolicy),
+            (params.rtcpMuxPolicy = connection.rtcpMuxPolicy),
           connection.sdpSemantics &&
-          (params.sdpSemantics = connection.sdpSemantics || "unified-plan"),
+            (params.sdpSemantics = connection.sdpSemantics || "unified-plan"),
           (connection.iceServers && connection.iceServers.length) ||
-          ((params = null), (connection.optionalArgument = null)),
+            ((params = null), (connection.optionalArgument = null)),
           (peer = new RTCPeerConnection(params, connection.optionalArgument));
       } catch (e) {
         try {
@@ -1143,16 +1142,16 @@ var RTCMultiConnection = function (roomid, forceOptions) {
         );
       }),
       !peer.getLocalStreams &&
-      peer.getSenders &&
-      (peer.getLocalStreams = function () {
-        var stream = new MediaStream();
-        return (
-          peer.getSenders().forEach(function (sender) {
-            stream.addTrack(sender.track);
-          }),
-          [stream]
-        );
-      }),
+        peer.getSenders &&
+        (peer.getLocalStreams = function () {
+          var stream = new MediaStream();
+          return (
+            peer.getSenders().forEach(function (sender) {
+              stream.addTrack(sender.track);
+            }),
+            [stream]
+          );
+        }),
       (peer.onicecandidate = function (event) {
         if (event.candidate)
           connection.trickleIce &&
@@ -1181,18 +1180,18 @@ var RTCMultiConnection = function (roomid, forceOptions) {
           config.remoteSdp.remotePeerSdpConstraints.dontGetRemoteStream) ||
           config.dontAttachLocalStream ||
           ((localStream = connection.beforeAddingStream(localStream, self)),
-            localStream &&
+          localStream &&
             (peer.getLocalStreams().forEach(function (stream) {
               localStream &&
                 stream.id == localStream.id &&
                 (localStream = null);
             }),
-              localStream &&
+            localStream &&
               localStream.getTracks &&
               localStream.getTracks().forEach(function (track) {
                 try {
                   peer.addTrack(track, localStream);
-                } catch (e) { }
+                } catch (e) {}
               })));
       }),
       (peer.oniceconnectionstatechange = peer.onsignalingstatechange = function () {
@@ -1200,25 +1199,25 @@ var RTCMultiConnection = function (roomid, forceOptions) {
         connection.peers[self.userid] &&
           (extra = connection.peers[self.userid].extra || extra),
           peer &&
-          (config.onPeerStateChanged({
-            iceConnectionState: peer.iceConnectionState,
-            iceGatheringState: peer.iceGatheringState,
-            signalingState: peer.signalingState,
-            extra: extra,
-            userid: self.userid,
-          }),
+            (config.onPeerStateChanged({
+              iceConnectionState: peer.iceConnectionState,
+              iceGatheringState: peer.iceGatheringState,
+              signalingState: peer.signalingState,
+              extra: extra,
+              userid: self.userid,
+            }),
             peer &&
-            peer.iceConnectionState &&
-            peer.iceConnectionState.search(/closed|failed/gi) !== -1 &&
-            self.streams instanceof Array &&
-            self.streams.forEach(function (stream) {
-              var streamEvent = connection.streamEvents[stream.id] || {
-                streamid: stream.id,
-                stream: stream,
-                type: "remote",
-              };
-              connection.onstreamended(streamEvent);
-            }));
+              peer.iceConnectionState &&
+              peer.iceConnectionState.search(/closed|failed/gi) !== -1 &&
+              self.streams instanceof Array &&
+              self.streams.forEach(function (stream) {
+                var streamEvent = connection.streamEvents[stream.id] || {
+                  streamid: stream.id,
+                  stream: stream,
+                  type: "remote",
+                };
+                connection.onstreamended(streamEvent);
+              }));
       });
     var sdpConstraints = {
       OfferToReceiveAudio: !!localStreams.length,
@@ -1232,8 +1231,8 @@ var RTCMultiConnection = function (roomid, forceOptions) {
       if (event && "track" === event.type) {
         if (
           ((event.stream = event.streams[event.streams.length - 1]),
-            event.stream.id || (event.stream.id = event.track.id),
-            dontDuplicate[event.stream.id] && "Safari" !== DetectRTC.browser.name)
+          event.stream.id || (event.stream.id = event.track.id),
+          dontDuplicate[event.stream.id] && "Safari" !== DetectRTC.browser.name)
         )
           return void (
             event.track &&
@@ -1270,22 +1269,22 @@ var RTCMultiConnection = function (roomid, forceOptions) {
       (peer.onremovestream = function (event) {
         (event.stream.streamid = event.stream.id),
           allRemoteStreams[event.stream.id] &&
-          delete allRemoteStreams[event.stream.id],
+            delete allRemoteStreams[event.stream.id],
           config.onRemoteStreamRemoved(event.stream);
       }),
       "function" != typeof peer.removeStream &&
-      (peer.removeStream = function (stream) {
-        stream.getTracks().forEach(function (track) {
-          peer.removeTrack(track, stream);
-        });
-      }),
+        (peer.removeStream = function (stream) {
+          stream.getTracks().forEach(function (track) {
+            peer.removeTrack(track, stream);
+          });
+        }),
       (this.addRemoteCandidate = function (remoteCandidate) {
         peer.addIceCandidate(new RTCIceCandidate(remoteCandidate));
       }),
       (this.addRemoteSdp = function (remoteSdp, cb) {
-        (cb = cb || function () { }),
+        (cb = cb || function () {}),
           "Safari" !== DetectRTC.browser.name &&
-          (remoteSdp.sdp = connection.processSdp(remoteSdp.sdp)),
+            (remoteSdp.sdp = connection.processSdp(remoteSdp.sdp)),
           peer
             .setRemoteDescription(new RTCSessionDescription(remoteSdp))
             .then(cb, function (error) {
@@ -1299,17 +1298,17 @@ var RTCMultiConnection = function (roomid, forceOptions) {
                 ),
                 cb();
             })
-          ["catch"](function (error) {
-            connection.enableLogs &&
-              console.error(
-                "setRemoteDescription failed",
-                "\n",
-                error,
-                "\n",
-                remoteSdp.sdp
-              ),
-              cb();
-          });
+            ["catch"](function (error) {
+              connection.enableLogs &&
+                console.error(
+                  "setRemoteDescription failed",
+                  "\n",
+                  error,
+                  "\n",
+                  remoteSdp.sdp
+                ),
+                cb();
+            });
       });
     var isOfferer = !0;
     config.remoteSdp && (isOfferer = !1),
@@ -1318,32 +1317,32 @@ var RTCMultiConnection = function (roomid, forceOptions) {
         setChannelEvents(channel);
       }),
       connection.session.data !== !0 ||
-      renegotiatingPeer ||
-      (isOfferer
-        ? this.createDataChannel()
-        : (peer.ondatachannel = function (event) {
-          var channel = event.channel;
-          setChannelEvents(channel);
-        })),
+        renegotiatingPeer ||
+        (isOfferer
+          ? this.createDataChannel()
+          : (peer.ondatachannel = function (event) {
+              var channel = event.channel;
+              setChannelEvents(channel);
+            })),
       (this.enableDisableVideoEncoding = function (enable) {
         var rtcp;
         if (
           (peer.getSenders().forEach(function (sender) {
             rtcp || "video" !== sender.track.kind || (rtcp = sender);
           }),
-            rtcp && rtcp.getParameters)
+          rtcp && rtcp.getParameters)
         ) {
           var parameters = rtcp.getParameters();
           parameters.encodings[1] &&
             (parameters.encodings[1].active = !!enable),
             parameters.encodings[2] &&
-            (parameters.encodings[2].active = !!enable),
+              (parameters.encodings[2].active = !!enable),
             rtcp.setParameters(parameters);
         }
       }),
       config.remoteSdp &&
-      (config.remoteSdp.remotePeerSdpConstraints &&
-        (sdpConstraints = config.remoteSdp.remotePeerSdpConstraints),
+        (config.remoteSdp.remotePeerSdpConstraints &&
+          (sdpConstraints = config.remoteSdp.remotePeerSdpConstraints),
         (defaults.sdpConstraints = setSdpConstraints(sdpConstraints)),
         this.addRemoteSdp(config.remoteSdp, function () {
           createOfferOrAnswer("createAnswer");
@@ -1351,19 +1350,19 @@ var RTCMultiConnection = function (roomid, forceOptions) {
       ("two-way" != connection.session.audio &&
         "two-way" != connection.session.video &&
         "two-way" != connection.session.screen) ||
-      (defaults.sdpConstraints = setSdpConstraints({
-        OfferToReceiveAudio:
-          "two-way" == connection.session.audio ||
-          (config.remoteSdp &&
-            config.remoteSdp.remotePeerSdpConstraints &&
-            config.remoteSdp.remotePeerSdpConstraints.OfferToReceiveAudio),
-        OfferToReceiveVideo:
-          "two-way" == connection.session.video ||
-          "two-way" == connection.session.screen ||
-          (config.remoteSdp &&
-            config.remoteSdp.remotePeerSdpConstraints &&
-            config.remoteSdp.remotePeerSdpConstraints.OfferToReceiveAudio),
-      }));
+        (defaults.sdpConstraints = setSdpConstraints({
+          OfferToReceiveAudio:
+            "two-way" == connection.session.audio ||
+            (config.remoteSdp &&
+              config.remoteSdp.remotePeerSdpConstraints &&
+              config.remoteSdp.remotePeerSdpConstraints.OfferToReceiveAudio),
+          OfferToReceiveVideo:
+            "two-way" == connection.session.video ||
+            "two-way" == connection.session.screen ||
+            (config.remoteSdp &&
+              config.remoteSdp.remotePeerSdpConstraints &&
+              config.remoteSdp.remotePeerSdpConstraints.OfferToReceiveAudio),
+        }));
     var streamsToShare = {};
     peer.getLocalStreams().forEach(function (stream) {
       streamsToShare[stream.streamid] = {
@@ -1378,7 +1377,7 @@ var RTCMultiConnection = function (roomid, forceOptions) {
         if (peer) {
           try {
             peer.nativeClose !== peer.close && peer.nativeClose();
-          } catch (e) { }
+          } catch (e) {}
           (peer = null), (self.peer = null);
         }
       }),
@@ -1388,10 +1387,10 @@ var RTCMultiConnection = function (roomid, forceOptions) {
     constraints.mandatory && constraints.mandatory.chromeMediaSource
       ? (stream.isScreen = !0)
       : constraints.mozMediaSource || constraints.mediaSource
-        ? (stream.isScreen = !0)
-        : constraints.video
-          ? (stream.isVideo = !0)
-          : constraints.audio && (stream.isAudio = !0);
+      ? (stream.isScreen = !0)
+      : constraints.video
+      ? (stream.isVideo = !0)
+      : constraints.audio && (stream.isAudio = !0);
   }
   function getUserMediaHandler(options) {
     function streaming(stream, returnBack) {
@@ -1404,9 +1403,9 @@ var RTCMultiConnection = function (roomid, forceOptions) {
             delete currentUserMediaRequest.streams[idInstance],
               (currentUserMediaRequest.mutex = !1),
               currentUserMediaRequest.queueRequests.indexOf(options) &&
-              (delete currentUserMediaRequest.queueRequests[
-                currentUserMediaRequest.queueRequests.indexOf(options)
-              ],
+                (delete currentUserMediaRequest.queueRequests[
+                  currentUserMediaRequest.queueRequests.indexOf(options)
+                ],
                 (currentUserMediaRequest.queueRequests = removeNullEntries(
                   currentUserMediaRequest.queueRequests
                 )));
@@ -1416,7 +1415,7 @@ var RTCMultiConnection = function (roomid, forceOptions) {
         (currentUserMediaRequest.streams[idInstance] = { stream: stream }),
         (currentUserMediaRequest.mutex = !1),
         currentUserMediaRequest.queueRequests.length &&
-        getUserMediaHandler(currentUserMediaRequest.queueRequests.shift()),
+          getUserMediaHandler(currentUserMediaRequest.queueRequests.shift()),
         options.onGettingLocalMedia(stream, returnBack);
     }
     if (currentUserMediaRequest.mutex === !0)
@@ -1457,8 +1456,8 @@ var RTCMultiConnection = function (roomid, forceOptions) {
           navigator.mozGetUserMedia;
         var getUserMediaStream,
           getUserMediaError,
-          getUserMediaSuccess = function () { },
-          getUserMediaFailure = function () { };
+          getUserMediaSuccess = function () {},
+          getUserMediaFailure = function () {};
         navigator.mediaDevices = {
           getUserMedia: function (hints) {
             return (
@@ -1476,13 +1475,13 @@ var RTCMultiConnection = function (roomid, forceOptions) {
                   return getUserMediaStream
                     ? void successCB(getUserMediaStream)
                     : ((getUserMediaSuccess = successCB),
-                    {
-                      then: function (failureCB) {
-                        return getUserMediaError
-                          ? void failureCB(getUserMediaError)
-                          : void (getUserMediaFailure = failureCB);
-                      },
-                    });
+                      {
+                        then: function (failureCB) {
+                          return getUserMediaError
+                            ? void failureCB(getUserMediaError)
+                            : void (getUserMediaFailure = failureCB);
+                        },
+                      });
                 },
               }
             );
@@ -1499,9 +1498,9 @@ var RTCMultiConnection = function (roomid, forceOptions) {
                 (stream.idInstance = idInstance),
                 streaming(stream);
             })
-          ["catch"](function (error) {
-            options.onLocalMediaError(error, options.localMediaConstraints);
-          });
+            ["catch"](function (error) {
+              options.onLocalMediaError(error, options.localMediaConstraints);
+            });
         else {
           if (!navigator.getDisplayMedia)
             throw new Error(
@@ -1515,9 +1514,9 @@ var RTCMultiConnection = function (roomid, forceOptions) {
                 (stream.idInstance = idInstance),
                 streaming(stream);
             })
-          ["catch"](function (error) {
-            options.onLocalMediaError(error, options.localMediaConstraints);
-          });
+            ["catch"](function (error) {
+              options.onLocalMediaError(error, options.localMediaConstraints);
+            });
         }
         return;
       }
@@ -1528,9 +1527,9 @@ var RTCMultiConnection = function (roomid, forceOptions) {
             (stream.idInstance = idInstance),
             streaming(stream);
         })
-      ["catch"](function (error) {
-        options.onLocalMediaError(error, options.localMediaConstraints);
-      });
+        ["catch"](function (error) {
+          options.onLocalMediaError(error, options.localMediaConstraints);
+        });
     }
   }
   function TextReceiver(connection) {
@@ -1538,8 +1537,8 @@ var RTCMultiConnection = function (roomid, forceOptions) {
       var uuid = data.uuid;
       if (
         (content[uuid] || (content[uuid] = []),
-          content[uuid].push(data.message),
-          data.last)
+        content[uuid].push(data.message),
+        data.last)
       ) {
         var message = content[uuid].join("");
         data.isobject && (message = JSON.parse(message));
@@ -1568,56 +1567,56 @@ var RTCMultiConnection = function (roomid, forceOptions) {
       "undefined" != typeof global &&
       ((global.navigator = {
         userAgent: browserFakeUserAgent,
-        getUserMedia: function () { },
+        getUserMedia: function () {},
       }),
-        global.console || (global.console = {}),
-        "undefined" == typeof global.console.debug &&
+      global.console || (global.console = {}),
+      "undefined" == typeof global.console.debug &&
         (global.console.debug = global.console.info = global.console.error = global.console.log =
           global.console.log ||
           function () {
             console.log(arguments);
           }),
-        "undefined" == typeof document &&
+      "undefined" == typeof document &&
         ((that.document = {}),
-          (document.createElement = document.captureStream = document.mozCaptureStream = function () {
-            var obj = {
-              getContext: function () {
-                return obj;
-              },
-              play: function () { },
-              pause: function () { },
-              drawImage: function () { },
-              toDataURL: function () {
-                return "";
-              },
-            };
-            return obj;
-          }),
-          (document.addEventListener = document.removeEventListener = that.addEventListener = that.removeEventListener = function () { }),
-          (that.HTMLVideoElement = that.HTMLMediaElement = function () { })),
-        "undefined" == typeof io &&
+        (document.createElement = document.captureStream = document.mozCaptureStream = function () {
+          var obj = {
+            getContext: function () {
+              return obj;
+            },
+            play: function () {},
+            pause: function () {},
+            drawImage: function () {},
+            toDataURL: function () {
+              return "";
+            },
+          };
+          return obj;
+        }),
+        (document.addEventListener = document.removeEventListener = that.addEventListener = that.removeEventListener = function () {}),
+        (that.HTMLVideoElement = that.HTMLMediaElement = function () {})),
+      "undefined" == typeof io &&
         (that.io = function () {
           return {
             on: function (eventName, callback) {
-              (callback = callback || function () { }),
+              (callback = callback || function () {}),
                 "connect" === eventName && callback();
             },
             emit: function (eventName, data, callback) {
-              (callback = callback || function () { }),
+              (callback = callback || function () {}),
                 ("open-room" !== eventName && "join-room" !== eventName) ||
-                callback(!0, data.sessionid, null);
+                  callback(!0, data.sessionid, null);
             },
           };
         }),
-        "undefined" == typeof location &&
+      "undefined" == typeof location &&
         (that.location = {
           protocol: "file:",
           href: "",
           hash: "",
           origin: "self",
         }),
-        "undefined" == typeof screen && (that.screen = { width: 0, height: 0 }),
-        "undefined" == typeof URL &&
+      "undefined" == typeof screen && (that.screen = { width: 0, height: 0 }),
+      "undefined" == typeof URL &&
         (that.URL = {
           createObjectURL: function () {
             return "";
@@ -1626,7 +1625,7 @@ var RTCMultiConnection = function (roomid, forceOptions) {
             return "";
           },
         }),
-        (that.window = global));
+      (that.window = global));
   })("undefined" != typeof global ? global : null),
     (function () {
       function getBrowserInfo() {
@@ -1642,7 +1641,7 @@ var RTCMultiConnection = function (roomid, forceOptions) {
             !isChrome &&
             nAgt.indexOf("CriOS") !== -1 &&
             ((isSafari = !1), (isChrome = !0)),
-            isOpera)
+          isOpera)
         ) {
           browserName = "Opera";
           try {
@@ -1660,38 +1659,38 @@ var RTCMultiConnection = function (roomid, forceOptions) {
                   (fullVersion = nAgt.substring(verOffset + 5))),
               (browserName = "IE"))
             : isChrome
-              ? ((verOffset = nAgt.indexOf("Chrome")),
-                (browserName = "Chrome"),
-                (fullVersion = nAgt.substring(verOffset + 7)))
-              : isSafari
-                ? ((verOffset = nAgt.indexOf("Safari")),
-                  (browserName = "Safari"),
-                  (fullVersion = nAgt.substring(verOffset + 7)),
-                  (verOffset = nAgt.indexOf("Version")) !== -1 &&
-                  (fullVersion = nAgt.substring(verOffset + 8)),
-                  navigator.userAgent.indexOf("Version/") !== -1 &&
-                  (fullVersion = navigator.userAgent
-                    .split("Version/")[1]
-                    .split(" ")[0]))
-                : isFirefox
-                  ? ((verOffset = nAgt.indexOf("Firefox")),
-                    (browserName = "Firefox"),
-                    (fullVersion = nAgt.substring(verOffset + 8)))
-                  : (nameOffset = nAgt.lastIndexOf(" ") + 1) <
-                  (verOffset = nAgt.lastIndexOf("/")) &&
-                  ((browserName = nAgt.substring(nameOffset, verOffset)),
-                    (fullVersion = nAgt.substring(verOffset + 1)),
-                    browserName.toLowerCase() === browserName.toUpperCase() &&
-                    (browserName = navigator.appName));
+            ? ((verOffset = nAgt.indexOf("Chrome")),
+              (browserName = "Chrome"),
+              (fullVersion = nAgt.substring(verOffset + 7)))
+            : isSafari
+            ? ((verOffset = nAgt.indexOf("Safari")),
+              (browserName = "Safari"),
+              (fullVersion = nAgt.substring(verOffset + 7)),
+              (verOffset = nAgt.indexOf("Version")) !== -1 &&
+                (fullVersion = nAgt.substring(verOffset + 8)),
+              navigator.userAgent.indexOf("Version/") !== -1 &&
+                (fullVersion = navigator.userAgent
+                  .split("Version/")[1]
+                  .split(" ")[0]))
+            : isFirefox
+            ? ((verOffset = nAgt.indexOf("Firefox")),
+              (browserName = "Firefox"),
+              (fullVersion = nAgt.substring(verOffset + 8)))
+            : (nameOffset = nAgt.lastIndexOf(" ") + 1) <
+                (verOffset = nAgt.lastIndexOf("/")) &&
+              ((browserName = nAgt.substring(nameOffset, verOffset)),
+              (fullVersion = nAgt.substring(verOffset + 1)),
+              browserName.toLowerCase() === browserName.toUpperCase() &&
+                (browserName = navigator.appName));
         return (
           isEdge &&
-          ((browserName = "Edge"),
+            ((browserName = "Edge"),
             (fullVersion = navigator.userAgent.split("Edge/")[1])),
           (ix = fullVersion.search(/[; \)]/)) !== -1 &&
-          (fullVersion = fullVersion.substring(0, ix)),
+            (fullVersion = fullVersion.substring(0, ix)),
           (majorVersion = parseInt("" + fullVersion, 10)),
           isNaN(majorVersion) &&
-          ((fullVersion = "" + parseFloat(navigator.appVersion)),
+            ((fullVersion = "" + parseFloat(navigator.appVersion)),
             (majorVersion = parseInt(navigator.appVersion, 10))),
           {
             fullVersion: fullVersion,
@@ -1708,7 +1707,7 @@ var RTCMultiConnection = function (roomid, forceOptions) {
           id = window.setInterval(function () {
             isDone() && (window.clearInterval(id), next(isTimeout)),
               currentTrial++ > maxRetry &&
-              (window.clearInterval(id), (isTimeout = !0), next(isTimeout));
+                (window.clearInterval(id), (isTimeout = !0), next(isTimeout));
           }, 10);
       }
       function isIE10OrLater(userAgent) {
@@ -1787,45 +1786,45 @@ var RTCMultiConnection = function (roomid, forceOptions) {
       function detectDesktopOS() {
         for (
           var cs,
-          unknown = "-",
-          nVer = navigator.appVersion,
-          nAgt = navigator.userAgent,
-          os = unknown,
-          clientStrings = [
-            { s: "Windows 10", r: /(Windows 10.0|Windows NT 10.0)/ },
-            { s: "Windows 8.1", r: /(Windows 8.1|Windows NT 6.3)/ },
-            { s: "Windows 8", r: /(Windows 8|Windows NT 6.2)/ },
-            { s: "Windows 7", r: /(Windows 7|Windows NT 6.1)/ },
-            { s: "Windows Vista", r: /Windows NT 6.0/ },
-            { s: "Windows Server 2003", r: /Windows NT 5.2/ },
-            { s: "Windows XP", r: /(Windows NT 5.1|Windows XP)/ },
-            { s: "Windows 2000", r: /(Windows NT 5.0|Windows 2000)/ },
-            { s: "Windows ME", r: /(Win 9x 4.90|Windows ME)/ },
-            { s: "Windows 98", r: /(Windows 98|Win98)/ },
-            { s: "Windows 95", r: /(Windows 95|Win95|Windows_95)/ },
-            {
-              s: "Windows NT 4.0",
-              r: /(Windows NT 4.0|WinNT4.0|WinNT|Windows NT)/,
-            },
-            { s: "Windows CE", r: /Windows CE/ },
-            { s: "Windows 3.11", r: /Win16/ },
-            { s: "Android", r: /Android/ },
-            { s: "Open BSD", r: /OpenBSD/ },
-            { s: "Sun OS", r: /SunOS/ },
-            { s: "Linux", r: /(Linux|X11)/ },
-            { s: "iOS", r: /(iPhone|iPad|iPod)/ },
-            { s: "Mac OS X", r: /Mac OS X/ },
-            { s: "Mac OS", r: /(MacPPC|MacIntel|Mac_PowerPC|Macintosh)/ },
-            { s: "QNX", r: /QNX/ },
-            { s: "UNIX", r: /UNIX/ },
-            { s: "BeOS", r: /BeOS/ },
-            { s: "OS/2", r: /OS\/2/ },
-            {
-              s: "Search Bot",
-              r: /(nuhk|Googlebot|Yammybot|Openbot|Slurp|MSNBot|Ask Jeeves\/Teoma|ia_archiver)/,
-            },
-          ],
-          i = 0;
+            unknown = "-",
+            nVer = navigator.appVersion,
+            nAgt = navigator.userAgent,
+            os = unknown,
+            clientStrings = [
+              { s: "Windows 10", r: /(Windows 10.0|Windows NT 10.0)/ },
+              { s: "Windows 8.1", r: /(Windows 8.1|Windows NT 6.3)/ },
+              { s: "Windows 8", r: /(Windows 8|Windows NT 6.2)/ },
+              { s: "Windows 7", r: /(Windows 7|Windows NT 6.1)/ },
+              { s: "Windows Vista", r: /Windows NT 6.0/ },
+              { s: "Windows Server 2003", r: /Windows NT 5.2/ },
+              { s: "Windows XP", r: /(Windows NT 5.1|Windows XP)/ },
+              { s: "Windows 2000", r: /(Windows NT 5.0|Windows 2000)/ },
+              { s: "Windows ME", r: /(Win 9x 4.90|Windows ME)/ },
+              { s: "Windows 98", r: /(Windows 98|Win98)/ },
+              { s: "Windows 95", r: /(Windows 95|Win95|Windows_95)/ },
+              {
+                s: "Windows NT 4.0",
+                r: /(Windows NT 4.0|WinNT4.0|WinNT|Windows NT)/,
+              },
+              { s: "Windows CE", r: /Windows CE/ },
+              { s: "Windows 3.11", r: /Win16/ },
+              { s: "Android", r: /Android/ },
+              { s: "Open BSD", r: /OpenBSD/ },
+              { s: "Sun OS", r: /SunOS/ },
+              { s: "Linux", r: /(Linux|X11)/ },
+              { s: "iOS", r: /(iPhone|iPad|iPod)/ },
+              { s: "Mac OS X", r: /Mac OS X/ },
+              { s: "Mac OS", r: /(MacPPC|MacIntel|Mac_PowerPC|Macintosh)/ },
+              { s: "QNX", r: /QNX/ },
+              { s: "UNIX", r: /UNIX/ },
+              { s: "BeOS", r: /BeOS/ },
+              { s: "OS/2", r: /OS\/2/ },
+              {
+                s: "Search Bot",
+                r: /(nuhk|Googlebot|Yammybot|Openbot|Slurp|MSNBot|Ask Jeeves\/Teoma|ia_archiver)/,
+              },
+            ],
+            i = 0;
           (cs = clientStrings[i]);
           i++
         )
@@ -1835,9 +1834,9 @@ var RTCMultiConnection = function (roomid, forceOptions) {
           }
         var osVersion = unknown;
         switch (
-        (/Windows/.test(os) &&
-          (/Windows (.*)/.test(os) &&
-            (osVersion = /Windows (.*)/.exec(os)[1]),
+          (/Windows/.test(os) &&
+            (/Windows (.*)/.test(os) &&
+              (osVersion = /Windows (.*)/.exec(os)[1]),
             (os = "Windows")),
           os)
         ) {
@@ -1852,8 +1851,8 @@ var RTCMultiConnection = function (roomid, forceOptions) {
           case "iOS":
             /OS (\d+)_(\d+)_?(\d+)?/.test(nAgt) &&
               ((osVersion = /OS (\d+)_(\d+)_?(\d+)?/.exec(nVer)),
-                (osVersion =
-                  osVersion[1] + "." + osVersion[2] + "." + (0 | osVersion[3])));
+              (osVersion =
+                osVersion[1] + "." + osVersion[2] + "." + (0 | osVersion[3])));
         }
         return { osName: os, osVersion: osVersion };
       }
@@ -1871,8 +1870,8 @@ var RTCMultiConnection = function (roomid, forceOptions) {
               ? ip.match(regexIpv4Local)
                 ? ((isPublic = !1), callback("Local: " + ip, isPublic, isIpv4))
                 : ip.match(regexIpv6)
-                  ? ((isIpv4 = !1), callback("Public: " + ip, isPublic, isIpv4))
-                  : callback("Public: " + ip, isPublic, isIpv4)
+                ? ((isIpv4 = !1), callback("Public: " + ip, isPublic, isIpv4))
+                : callback("Public: " + ip, isPublic, isIpv4)
               : callback();
           }, stream);
         }
@@ -1920,40 +1919,40 @@ var RTCMultiConnection = function (roomid, forceOptions) {
               DetectRTC.browser.version < 58 &&
               (peerConfig = { optional: [{ RtpDataChannels: !0 }] });
             var servers = {
-              iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
-            },
+                iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
+              },
               pc = new RTCPeerConnection(servers, peerConfig);
             if (
               (stream &&
                 (pc.addStream
                   ? pc.addStream(stream)
                   : pc.addTrack &&
-                  stream.getTracks()[0] &&
-                  pc.addTrack(stream.getTracks()[0], stream)),
-                (pc.onicecandidate = function (event) {
-                  event.candidate && event.candidate.candidate
-                    ? handleCandidate(event.candidate.candidate)
-                    : handleCandidate();
-                }),
-                !stream)
+                    stream.getTracks()[0] &&
+                    pc.addTrack(stream.getTracks()[0], stream)),
+              (pc.onicecandidate = function (event) {
+                event.candidate && event.candidate.candidate
+                  ? handleCandidate(event.candidate.candidate)
+                  : handleCandidate();
+              }),
+              !stream)
             )
               try {
                 pc.createDataChannel("sctp", {});
-              } catch (e) { }
+              } catch (e) {}
             DetectRTC.isPromisesSupported
               ? pc.createOffer().then(function (result) {
-                pc.setLocalDescription(result).then(afterCreateOffer);
-              })
+                  pc.setLocalDescription(result).then(afterCreateOffer);
+                })
               : pc.createOffer(
-                function (result) {
-                  pc.setLocalDescription(
-                    result,
-                    afterCreateOffer,
-                    function () { }
-                  );
-                },
-                function () { }
-              );
+                  function (result) {
+                    pc.setLocalDescription(
+                      result,
+                      afterCreateOffer,
+                      function () {}
+                    );
+                  },
+                  function () {}
+                );
           }
         }
       }
@@ -1966,12 +1965,12 @@ var RTCMultiConnection = function (roomid, forceOptions) {
             (navigator.enumerateDevices = window.MediaStreamTrack.getSources.bind(
               window.MediaStreamTrack
             )),
-            !navigator.enumerateDevices &&
+          !navigator.enumerateDevices &&
             navigator.enumerateDevices &&
             (navigator.enumerateDevices = navigator.enumerateDevices.bind(
               navigator
             )),
-            !navigator.enumerateDevices)
+          !navigator.enumerateDevices)
         )
           return void (callback && callback());
         (MediaDevices = []),
@@ -1990,31 +1989,31 @@ var RTCMultiConnection = function (roomid, forceOptions) {
             for (var d in _device)
               try {
                 "function" != typeof _device[d] && (device[d] = _device[d]);
-              } catch (e) { }
+              } catch (e) {}
             alreadyUsedDevices[device.deviceId + device.label + device.kind] ||
               ("audio" === device.kind && (device.kind = "audioinput"),
-                "video" === device.kind && (device.kind = "videoinput"),
-                device.deviceId || (device.deviceId = device.id),
-                device.id || (device.id = device.deviceId),
-                device.label
-                  ? ("videoinput" !== device.kind ||
+              "video" === device.kind && (device.kind = "videoinput"),
+              device.deviceId || (device.deviceId = device.id),
+              device.id || (device.id = device.deviceId),
+              device.label
+                ? ("videoinput" !== device.kind ||
                     isWebsiteHasWebcamPermissions ||
                     (isWebsiteHasWebcamPermissions = !0),
-                    "audioinput" !== device.kind ||
+                  "audioinput" !== device.kind ||
                     isWebsiteHasMicrophonePermissions ||
                     (isWebsiteHasMicrophonePermissions = !0))
-                  : ((device.isCustomLabel = !0),
-                    "videoinput" === device.kind
-                      ? (device.label =
+                : ((device.isCustomLabel = !0),
+                  "videoinput" === device.kind
+                    ? (device.label =
                         "Camera " + (videoInputDevices.length + 1))
-                      : "audioinput" === device.kind
-                        ? (device.label =
-                          "Microphone " + (audioInputDevices.length + 1))
-                        : "audiooutput" === device.kind
-                          ? (device.label =
-                            "Speaker " + (audioOutputDevices.length + 1))
-                          : (device.label = "Please invoke getUserMedia once."),
-                    "undefined" != typeof DetectRTC &&
+                    : "audioinput" === device.kind
+                    ? (device.label =
+                        "Microphone " + (audioInputDevices.length + 1))
+                    : "audiooutput" === device.kind
+                    ? (device.label =
+                        "Speaker " + (audioOutputDevices.length + 1))
+                    : (device.label = "Please invoke getUserMedia once."),
+                  "undefined" != typeof DetectRTC &&
                     DetectRTC.browser.isChrome &&
                     DetectRTC.browser.version >= 46 &&
                     !/^(https:|chrome-extension:)$/g.test(
@@ -2028,25 +2027,25 @@ var RTCMultiConnection = function (roomid, forceOptions) {
                       "HTTPs is required to get label of this " +
                       device.kind +
                       " device.")),
-                "audioinput" === device.kind &&
+              "audioinput" === device.kind &&
                 ((hasMicrophone = !0),
-                  audioInputDevices.indexOf(device) === -1 &&
+                audioInputDevices.indexOf(device) === -1 &&
                   audioInputDevices.push(device)),
-                "audiooutput" === device.kind &&
+              "audiooutput" === device.kind &&
                 ((hasSpeakers = !0),
-                  audioOutputDevices.indexOf(device) === -1 &&
+                audioOutputDevices.indexOf(device) === -1 &&
                   audioOutputDevices.push(device)),
-                "videoinput" === device.kind &&
+              "videoinput" === device.kind &&
                 ((hasWebcam = !0),
-                  videoInputDevices.indexOf(device) === -1 &&
+                videoInputDevices.indexOf(device) === -1 &&
                   videoInputDevices.push(device)),
-                MediaDevices.push(device),
-                (alreadyUsedDevices[
-                  device.deviceId + device.label + device.kind
-                ] = device));
+              MediaDevices.push(device),
+              (alreadyUsedDevices[
+                device.deviceId + device.label + device.kind
+              ] = device));
           }),
             "undefined" != typeof DetectRTC &&
-            ((DetectRTC.MediaDevices = MediaDevices),
+              ((DetectRTC.MediaDevices = MediaDevices),
               (DetectRTC.hasMicrophone = hasMicrophone),
               (DetectRTC.hasSpeakers = hasSpeakers),
               (DetectRTC.hasWebcam = hasWebcam),
@@ -2066,7 +2065,7 @@ var RTCMultiConnection = function (roomid, forceOptions) {
         return w / r / (h / r);
       }
       var browserFakeUserAgent =
-        "Fake/5.0 (FakeOS) AppleWebKit/123 (KHTML, like Gecko) Fake/12.3.4567.89 Fake/123.45",
+          "Fake/5.0 (FakeOS) AppleWebKit/123 (KHTML, like Gecko) Fake/12.3.4567.89 Fake/123.45",
         isNodejs =
           "object" == typeof process &&
           "object" == typeof process.versions &&
@@ -2088,29 +2087,29 @@ var RTCMultiConnection = function (roomid, forceOptions) {
         "undefined" == typeof window &&
           ("undefined" == typeof window && "undefined" != typeof global
             ? ((global.navigator = {
-              userAgent: browserFakeUserAgent,
-              getUserMedia: function () { },
-            }),
+                userAgent: browserFakeUserAgent,
+                getUserMedia: function () {},
+              }),
               (that.window = global))
             : "undefined" == typeof window,
-            "undefined" == typeof location &&
+          "undefined" == typeof location &&
             (that.location = { protocol: "file:", href: "", hash: "" }),
-            "undefined" == typeof screen &&
+          "undefined" == typeof screen &&
             (that.screen = { width: 0, height: 0 }));
       })("undefined" != typeof global ? global : window);
       var navigator = window.navigator;
       "undefined" != typeof navigator
         ? ("undefined" != typeof navigator.webkitGetUserMedia &&
-          (navigator.getUserMedia = navigator.webkitGetUserMedia),
+            (navigator.getUserMedia = navigator.webkitGetUserMedia),
           "undefined" != typeof navigator.mozGetUserMedia &&
-          (navigator.getUserMedia = navigator.mozGetUserMedia))
+            (navigator.getUserMedia = navigator.mozGetUserMedia))
         : (navigator = {
-          getUserMedia: function () { },
-          userAgent: browserFakeUserAgent,
-        });
+            getUserMedia: function () {},
+            userAgent: browserFakeUserAgent,
+          });
       var isMobileDevice = !!/Android|webOS|iPhone|iPad|iPod|BB10|BlackBerry|IEMobile|Opera Mini|Mobile|mobile/i.test(
-        navigator.userAgent || ""
-      ),
+          navigator.userAgent || ""
+        ),
         isEdge = !(
           navigator.userAgent.indexOf("Edge") === -1 ||
           (!navigator.msSaveOrOpenBlob && !navigator.msSaveBlob)
@@ -2164,7 +2163,7 @@ var RTCMultiConnection = function (roomid, forceOptions) {
       osInfo && osInfo.osName && "-" != osInfo.osName
         ? ((osName = osInfo.osName), (osVersion = osInfo.osVersion))
         : isMobile.any() &&
-        ((osName = isMobile.getOsName()),
+          ((osName = isMobile.getOsName()),
           "Android" == osName && (osVersion = getAndroidVersion()));
       var isNodejs =
         "object" == typeof process &&
@@ -2173,7 +2172,7 @@ var RTCMultiConnection = function (roomid, forceOptions) {
       "Unknown OS" === osName &&
         isNodejs &&
         ((osName = "Nodejs"),
-          (osVersion = process.versions.node.toString().replace("v", "")));
+        (osVersion = process.versions.node.toString().replace("v", "")));
       var isCanvasSupportsStreamCapturing = !1,
         isVideoSupportsStreamCapturing = !1;
       ["captureStream", "mozCaptureStream", "webkitCaptureStream"].forEach(
@@ -2183,7 +2182,7 @@ var RTCMultiConnection = function (roomid, forceOptions) {
             (!isCanvasSupportsStreamCapturing &&
               item in document.createElement("canvas") &&
               (isCanvasSupportsStreamCapturing = !0),
-              !isVideoSupportsStreamCapturing &&
+            !isVideoSupportsStreamCapturing &&
               item in document.createElement("video") &&
               (isVideoSupportsStreamCapturing = !0));
         }
@@ -2201,19 +2200,19 @@ var RTCMultiConnection = function (roomid, forceOptions) {
           var enumerateDevices = navigator.mediaDevices.enumerateDevices();
           enumerateDevices && enumerateDevices.then
             ? navigator.mediaDevices
-              .enumerateDevices()
-              .then(callback)
-            ["catch"](function () {
-              callback([]);
-            })
+                .enumerateDevices()
+                .then(callback)
+                ["catch"](function () {
+                  callback([]);
+                })
             : callback([]);
         });
       var canEnumerate = !1;
       "undefined" != typeof MediaStreamTrack && "getSources" in MediaStreamTrack
         ? (canEnumerate = !0)
         : navigator.mediaDevices &&
-        navigator.mediaDevices.enumerateDevices &&
-        (canEnumerate = !0);
+          navigator.mediaDevices.enumerateDevices &&
+          (canEnumerate = !0);
       var hasMicrophone = !1,
         hasSpeakers = !1,
         hasWebcam = !1,
@@ -2231,7 +2230,7 @@ var RTCMultiConnection = function (roomid, forceOptions) {
         ("object" == typeof process &&
           "object" == typeof process.versions &&
           process.versions["node-webkit"],
-          !1);
+        !1);
       [
         "RTCPeerConnection",
         "webkitRTCPeerConnection",
@@ -2247,13 +2246,13 @@ var RTCMultiConnection = function (roomid, forceOptions) {
         (DetectRTC.browser.isChrome && DetectRTC.browser.version >= 35
           ? (isScreenCapturingSupported = !0)
           : DetectRTC.browser.isFirefox && DetectRTC.browser.version >= 34
-            ? (isScreenCapturingSupported = !0)
-            : DetectRTC.browser.isEdge && DetectRTC.browser.version >= 17
-              ? (isScreenCapturingSupported = !0)
-              : "Android" === DetectRTC.osName &&
-              DetectRTC.browser.isChrome &&
-              (isScreenCapturingSupported = !0),
-          !/^(https:|chrome-extension:)$/g.test(location.protocol || ""))
+          ? (isScreenCapturingSupported = !0)
+          : DetectRTC.browser.isEdge && DetectRTC.browser.version >= 17
+          ? (isScreenCapturingSupported = !0)
+          : "Android" === DetectRTC.osName &&
+            DetectRTC.browser.isChrome &&
+            (isScreenCapturingSupported = !0),
+        !/^(https:|chrome-extension:)$/g.test(location.protocol || ""))
       ) {
         var isNonLocalHost =
           "undefined" != typeof document &&
@@ -2261,9 +2260,9 @@ var RTCMultiConnection = function (roomid, forceOptions) {
           document.domain.search &&
           document.domain.search(/localhost|127.0./g) === -1;
         isNonLocalHost &&
-          (DetectRTC.browser.isChrome ||
-            DetectRTC.browser.isEdge ||
-            DetectRTC.browser.isOpera)
+        (DetectRTC.browser.isChrome ||
+          DetectRTC.browser.isEdge ||
+          DetectRTC.browser.isOpera)
           ? (isScreenCapturingSupported = !1)
           : DetectRTC.browser.isFirefox && (isScreenCapturingSupported = !1);
       }
@@ -2281,7 +2280,7 @@ var RTCMultiConnection = function (roomid, forceOptions) {
         webAudio.isSupported ||
           (item in window &&
             ((webAudio.isSupported = !0),
-              window[item] &&
+            window[item] &&
               "createMediaStreamSource" in window[item].prototype &&
               (webAudio.isCreateMediaStreamSourceSupported = !0)));
       }),
@@ -2297,8 +2296,8 @@ var RTCMultiConnection = function (roomid, forceOptions) {
       DetectRTC.browser.isFirefox && DetectRTC.browser.version > 28
         ? (isSCTPSupportd = !0)
         : DetectRTC.browser.isChrome && DetectRTC.browser.version > 25
-          ? (isSCTPSupportd = !0)
-          : DetectRTC.browser.isOpera &&
+        ? (isSCTPSupportd = !0)
+        : DetectRTC.browser.isOpera &&
           DetectRTC.browser.version >= 11 &&
           (isSCTPSupportd = !0),
         (DetectRTC.isSctpDataChannelsSupported = isSCTPSupportd),
@@ -2307,16 +2306,16 @@ var RTCMultiConnection = function (roomid, forceOptions) {
       navigator.getUserMedia
         ? (isGetUserMediaSupported = !0)
         : navigator.mediaDevices &&
-        navigator.mediaDevices.getUserMedia &&
-        (isGetUserMediaSupported = !0),
+          navigator.mediaDevices.getUserMedia &&
+          (isGetUserMediaSupported = !0),
         DetectRTC.browser.isChrome &&
-        DetectRTC.browser.version >= 46 &&
-        !/^(https:|chrome-extension:)$/g.test(location.protocol || "") &&
-        "undefined" != typeof document &&
-        "string" == typeof document.domain &&
-        document.domain.search &&
-        document.domain.search(/localhost|127.0./g) === -1 &&
-        (isGetUserMediaSupported = "Requires HTTPs"),
+          DetectRTC.browser.version >= 46 &&
+          !/^(https:|chrome-extension:)$/g.test(location.protocol || "") &&
+          "undefined" != typeof document &&
+          "string" == typeof document.domain &&
+          document.domain.search &&
+          document.domain.search(/localhost|127.0./g) === -1 &&
+          (isGetUserMediaSupported = "Requires HTTPs"),
         "Nodejs" === DetectRTC.osName && (isGetUserMediaSupported = !1),
         (DetectRTC.isGetUserMediaSupported = isGetUserMediaSupported);
       var displayResolution = "";
@@ -2333,22 +2332,22 @@ var RTCMultiConnection = function (roomid, forceOptions) {
         (DetectRTC.isCanvasSupportsStreamCapturing = isCanvasSupportsStreamCapturing),
         (DetectRTC.isVideoSupportsStreamCapturing = isVideoSupportsStreamCapturing),
         "Chrome" == DetectRTC.browser.name &&
-        DetectRTC.browser.version >= 53 &&
-        (DetectRTC.isCanvasSupportsStreamCapturing ||
-          (DetectRTC.isCanvasSupportsStreamCapturing =
-            "Requires chrome flag: enable-experimental-web-platform-features"),
+          DetectRTC.browser.version >= 53 &&
+          (DetectRTC.isCanvasSupportsStreamCapturing ||
+            (DetectRTC.isCanvasSupportsStreamCapturing =
+              "Requires chrome flag: enable-experimental-web-platform-features"),
           DetectRTC.isVideoSupportsStreamCapturing ||
-          (DetectRTC.isVideoSupportsStreamCapturing =
-            "Requires chrome flag: enable-experimental-web-platform-features")),
+            (DetectRTC.isVideoSupportsStreamCapturing =
+              "Requires chrome flag: enable-experimental-web-platform-features")),
         (DetectRTC.DetectLocalIPAddress = DetectLocalIPAddress),
         (DetectRTC.isWebSocketsSupported =
           "WebSocket" in window && 2 === window.WebSocket.CLOSING),
         (DetectRTC.isWebSocketsBlocked = !DetectRTC.isWebSocketsSupported),
         "Nodejs" === DetectRTC.osName &&
-        ((DetectRTC.isWebSocketsSupported = !0),
+          ((DetectRTC.isWebSocketsSupported = !0),
           (DetectRTC.isWebSocketsBlocked = !1)),
         (DetectRTC.checkWebSocketsSupport = function (callback) {
-          callback = callback || function () { };
+          callback = callback || function () {};
           try {
             var starttime,
               websocket = new WebSocket("wss://echo.websocket.org:443/");
@@ -2372,7 +2371,7 @@ var RTCMultiConnection = function (roomid, forceOptions) {
           }
         }),
         (DetectRTC.load = function (callback) {
-          (callback = callback || function () { }), checkDeviceSupport(callback);
+          (callback = callback || function () {}), checkDeviceSupport(callback);
         }),
         "undefined" != typeof MediaDevices
           ? (DetectRTC.MediaDevices = MediaDevices)
@@ -2394,11 +2393,11 @@ var RTCMultiConnection = function (roomid, forceOptions) {
       var isRTPSenderReplaceTracksSupported = !1;
       DetectRTC.browser.isFirefox && "undefined" != typeof mozRTCPeerConnection
         ? "getSenders" in mozRTCPeerConnection.prototype &&
-        (isRTPSenderReplaceTracksSupported = !0)
+          (isRTPSenderReplaceTracksSupported = !0)
         : DetectRTC.browser.isChrome &&
-        "undefined" != typeof webkitRTCPeerConnection &&
-        "getSenders" in webkitRTCPeerConnection.prototype &&
-        (isRTPSenderReplaceTracksSupported = !0),
+          "undefined" != typeof webkitRTCPeerConnection &&
+          "getSenders" in webkitRTCPeerConnection.prototype &&
+          (isRTPSenderReplaceTracksSupported = !0),
         (DetectRTC.isRTPSenderReplaceTracksSupported = isRTPSenderReplaceTracksSupported);
       var isRemoteStreamProcessingSupported = !1;
       DetectRTC.browser.isFirefox &&
@@ -2427,8 +2426,8 @@ var RTCMultiConnection = function (roomid, forceOptions) {
           : (DetectRTC.MediaStream = !1),
         "undefined" != typeof MediaStreamTrack
           ? (DetectRTC.MediaStreamTrack = Object.keys(
-            MediaStreamTrack.prototype
-          ))
+              MediaStreamTrack.prototype
+            ))
           : (DetectRTC.MediaStreamTrack = !1);
       var RTCPeerConnection =
         window.RTCPeerConnection ||
@@ -2436,27 +2435,27 @@ var RTCMultiConnection = function (roomid, forceOptions) {
         window.webkitRTCPeerConnection;
       "undefined" != typeof RTCPeerConnection
         ? (DetectRTC.RTCPeerConnection = Object.keys(
-          RTCPeerConnection.prototype
-        ))
+            RTCPeerConnection.prototype
+          ))
         : (DetectRTC.RTCPeerConnection = !1),
         (window.DetectRTC = DetectRTC),
         "undefined" != typeof module && (module.exports = DetectRTC),
         "function" == typeof define &&
-        define.amd &&
-        define("DetectRTC", [], function () {
-          return DetectRTC;
-        });
+          define.amd &&
+          define("DetectRTC", [], function () {
+            return DetectRTC;
+          });
     })(),
     "undefined" != typeof cordova &&
-    ((DetectRTC.isMobileDevice = !0), (DetectRTC.browser.name = "Chrome")),
+      ((DetectRTC.isMobileDevice = !0), (DetectRTC.browser.name = "Chrome")),
     navigator &&
-    navigator.userAgent &&
-    navigator.userAgent.indexOf("Crosswalk") !== -1 &&
-    ((DetectRTC.isMobileDevice = !0), (DetectRTC.browser.name = "Chrome")),
+      navigator.userAgent &&
+      navigator.userAgent.indexOf("Crosswalk") !== -1 &&
+      ((DetectRTC.isMobileDevice = !0), (DetectRTC.browser.name = "Chrome")),
     window.addEventListener ||
-    (window.addEventListener = function (el, eventName, eventHandler) {
-      el.attachEvent && el.attachEvent("on" + eventName, eventHandler);
-    }),
+      (window.addEventListener = function (el, eventName, eventHandler) {
+        el.attachEvent && el.attachEvent("on" + eventName, eventHandler);
+      }),
     (window.attachEventListener = function (video, type, listener, useCapture) {
       video.addEventListener(type, listener, useCapture);
     });
@@ -2465,12 +2464,12 @@ var RTCMultiConnection = function (roomid, forceOptions) {
     "undefined" != typeof webkitMediaStream &&
     (MediaStream = webkitMediaStream),
     "undefined" != typeof MediaStream &&
-    ("stop" in MediaStream.prototype ||
-      (MediaStream.prototype.stop = function () {
-        this.getTracks().forEach(function (track) {
-          track.stop();
-        });
-      })),
+      ("stop" in MediaStream.prototype ||
+        (MediaStream.prototype.stop = function () {
+          this.getTracks().forEach(function (track) {
+            track.stop();
+          });
+        })),
     (window.iOSDefaultAudioOutputDevice =
       window.iOSDefaultAudioOutputDevice || "speaker"),
     document.addEventListener("deviceready", setCordovaAPIs, !1),
@@ -2480,11 +2479,11 @@ var RTCMultiConnection = function (roomid, forceOptions) {
   "undefined" != typeof window.RTCPeerConnection
     ? (RTCPeerConnection = window.RTCPeerConnection)
     : "undefined" != typeof mozRTCPeerConnection
-      ? (RTCPeerConnection = mozRTCPeerConnection)
-      : "undefined" != typeof webkitRTCPeerConnection &&
+    ? (RTCPeerConnection = mozRTCPeerConnection)
+    : "undefined" != typeof webkitRTCPeerConnection &&
       (RTCPeerConnection = webkitRTCPeerConnection);
   var RTCSessionDescription =
-    window.RTCSessionDescription || window.mozRTCSessionDescription,
+      window.RTCSessionDescription || window.mozRTCSessionDescription,
     RTCIceCandidate = window.RTCIceCandidate || window.mozRTCIceCandidate,
     MediaStreamTrack = window.MediaStreamTrack,
     CodecsHandler = (function () {
@@ -2496,11 +2495,11 @@ var RTCMultiConnection = function (roomid, forceOptions) {
             ? sdp
             : "vp9" === codecName &&
               info.vp9LineNumber === info.videoCodecNumbers[0]
-              ? sdp
-              : "h264" === codecName &&
-                info.h264LineNumber === info.videoCodecNumbers[0]
-                ? sdp
-                : (sdp = preferCodecHelper(sdp, codecName, info))
+            ? sdp
+            : "h264" === codecName &&
+              info.h264LineNumber === info.videoCodecNumbers[0]
+            ? sdp
+            : (sdp = preferCodecHelper(sdp, codecName, info))
           : sdp;
       }
       function preferCodecHelper(sdp, codec, info, ignore) {
@@ -2518,7 +2517,7 @@ var RTCMultiConnection = function (roomid, forceOptions) {
           preferCodecNumber = info.h264LineNumber;
         }
         var newLine =
-          info.videoCodecNumbersOriginal.split("SAVPF")[0] + "SAVPF ",
+            info.videoCodecNumbersOriginal.split("SAVPF")[0] + "SAVPF ",
           newOrder = [preferCodecNumber];
         return (
           ignore && (newOrder = []),
@@ -2535,31 +2534,31 @@ var RTCMultiConnection = function (roomid, forceOptions) {
           sdp.split("\n").forEach(function (line) {
             0 === line.indexOf("m=video") &&
               ((info.videoCodecNumbers = []),
-                line
-                  .split("SAVPF")[1]
-                  .split(" ")
-                  .forEach(function (codecNumber) {
-                    (codecNumber = codecNumber.trim()),
-                      codecNumber &&
+              line
+                .split("SAVPF")[1]
+                .split(" ")
+                .forEach(function (codecNumber) {
+                  (codecNumber = codecNumber.trim()),
+                    codecNumber &&
                       codecNumber.length &&
                       (info.videoCodecNumbers.push(codecNumber),
-                        (info.videoCodecNumbersOriginal = line));
-                  })),
+                      (info.videoCodecNumbersOriginal = line));
+                })),
               line.indexOf("VP8/90000") === -1 ||
-              info.vp8LineNumber ||
-              (info.vp8LineNumber = line
-                .replace("a=rtpmap:", "")
-                .split(" ")[0]),
+                info.vp8LineNumber ||
+                (info.vp8LineNumber = line
+                  .replace("a=rtpmap:", "")
+                  .split(" ")[0]),
               line.indexOf("VP9/90000") === -1 ||
-              info.vp9LineNumber ||
-              (info.vp9LineNumber = line
-                .replace("a=rtpmap:", "")
-                .split(" ")[0]),
+                info.vp9LineNumber ||
+                (info.vp9LineNumber = line
+                  .replace("a=rtpmap:", "")
+                  .split(" ")[0]),
               line.indexOf("H264/90000") === -1 ||
-              info.h264LineNumber ||
-              (info.h264LineNumber = line
-                .replace("a=rtpmap:", "")
-                .split(" ")[0]);
+                info.h264LineNumber ||
+                (info.h264LineNumber = line
+                  .replace("a=rtpmap:", "")
+                  .split(" ")[0]);
           }),
           info
         );
@@ -2615,38 +2614,38 @@ var RTCMultiConnection = function (roomid, forceOptions) {
           ? "undefined" != typeof isFirefox && isFirefox
             ? sdp
             : (isScreen &&
-              (bandwidth.screen
-                ? bandwidth.screen < 300 &&
-                console.warn(
-                  "It seems that you are using wrong bandwidth value for screen. Screen sharing is expected to fail."
-                )
-                : console.warn(
-                  "It seems that you are not using bandwidth for screen. Screen sharing is expected to fail."
-                )),
+                (bandwidth.screen
+                  ? bandwidth.screen < 300 &&
+                    console.warn(
+                      "It seems that you are using wrong bandwidth value for screen. Screen sharing is expected to fail."
+                    )
+                  : console.warn(
+                      "It seems that you are not using bandwidth for screen. Screen sharing is expected to fail."
+                    )),
               bandwidth.screen &&
-              isScreen &&
-              ((sdp = sdp.replace(/b=AS([^\r\n]+\r\n)/g, "")),
+                isScreen &&
+                ((sdp = sdp.replace(/b=AS([^\r\n]+\r\n)/g, "")),
                 (sdp = sdp.replace(
                   /a=mid:video\r\n/g,
                   "a=mid:video\r\nb=AS:" + bandwidth.screen + "\r\n"
                 ))),
               (bandwidth.audio || bandwidth.video) &&
-              (sdp = sdp.replace(/b=AS([^\r\n]+\r\n)/g, "")),
+                (sdp = sdp.replace(/b=AS([^\r\n]+\r\n)/g, "")),
               bandwidth.audio &&
-              (sdp = sdp.replace(
-                /a=mid:audio\r\n/g,
-                "a=mid:audio\r\nb=AS:" + bandwidth.audio + "\r\n"
-              )),
+                (sdp = sdp.replace(
+                  /a=mid:audio\r\n/g,
+                  "a=mid:audio\r\nb=AS:" + bandwidth.audio + "\r\n"
+                )),
               bandwidth.screen
                 ? (sdp = sdp.replace(
-                  /a=mid:video\r\n/g,
-                  "a=mid:video\r\nb=AS:" + bandwidth.screen + "\r\n"
-                ))
+                    /a=mid:video\r\n/g,
+                    "a=mid:video\r\nb=AS:" + bandwidth.screen + "\r\n"
+                  ))
                 : bandwidth.video &&
-                (sdp = sdp.replace(
-                  /a=mid:video\r\n/g,
-                  "a=mid:video\r\nb=AS:" + bandwidth.video + "\r\n"
-                )),
+                  (sdp = sdp.replace(
+                    /a=mid:video\r\n/g,
+                    "a=mid:video\r\nb=AS:" + bandwidth.video + "\r\n"
+                  )),
               sdp)
           : sdp;
       }
@@ -2656,7 +2655,7 @@ var RTCMultiConnection = function (roomid, forceOptions) {
       function findLineInRange(sdpLines, startLine, endLine, prefix, substr) {
         for (
           var realEndLine = endLine !== -1 ? endLine : sdpLines.length,
-          i = startLine;
+            i = startLine;
           i < realEndLine;
           ++i
         )
@@ -2682,14 +2681,14 @@ var RTCMultiConnection = function (roomid, forceOptions) {
           vp8Index = findLine(sdpLines, "a=rtpmap", "VP8/90000");
         if (
           (vp8Index && (vp8Payload = getCodecPayloadType(sdpLines[vp8Index])),
-            !vp8Payload)
+          !vp8Payload)
         )
           return sdp;
         var rtxPayload,
           rtxIndex = findLine(sdpLines, "a=rtpmap", "rtx/90000");
         if (
           (rtxIndex && (rtxPayload = getCodecPayloadType(sdpLines[rtxIndex])),
-            !rtxIndex)
+          !rtxIndex)
         )
           return sdp;
         var rtxFmtpLineIndex = findLine(
@@ -2720,7 +2719,7 @@ var RTCMultiConnection = function (roomid, forceOptions) {
         if (
           (opusIndex &&
             (opusPayload = getCodecPayloadType(sdpLines[opusIndex])),
-            !opusPayload)
+          !opusPayload)
         )
           return sdp;
         var opusFmtpLineIndex = findLine(
@@ -2739,20 +2738,20 @@ var RTCMultiConnection = function (roomid, forceOptions) {
               ? params["sprop-stereo"]
               : "1")),
           "undefined" != typeof params.maxaveragebitrate &&
-          (appendOpusNext +=
-            "; maxaveragebitrate=" + (params.maxaveragebitrate || 1048576)),
+            (appendOpusNext +=
+              "; maxaveragebitrate=" + (params.maxaveragebitrate || 1048576)),
           "undefined" != typeof params.maxplaybackrate &&
-          (appendOpusNext +=
-            "; maxplaybackrate=" + (params.maxplaybackrate || 1048576)),
+            (appendOpusNext +=
+              "; maxplaybackrate=" + (params.maxplaybackrate || 1048576)),
           "undefined" != typeof params.cbr &&
-          (appendOpusNext +=
-            "; cbr=" + ("undefined" != typeof params.cbr ? params.cbr : "1")),
+            (appendOpusNext +=
+              "; cbr=" + ("undefined" != typeof params.cbr ? params.cbr : "1")),
           "undefined" != typeof params.useinbandfec &&
-          (appendOpusNext += "; useinbandfec=" + params.useinbandfec),
+            (appendOpusNext += "; useinbandfec=" + params.useinbandfec),
           "undefined" != typeof params.usedtx &&
-          (appendOpusNext += "; usedtx=" + params.usedtx),
+            (appendOpusNext += "; usedtx=" + params.usedtx),
           "undefined" != typeof params.maxptime &&
-          (appendOpusNext += "\r\na=maxptime:" + params.maxptime),
+            (appendOpusNext += "\r\na=maxptime:" + params.maxptime),
           (sdpLines[opusFmtpLineIndex] = sdpLines[opusFmtpLineIndex].concat(
             appendOpusNext
           )),
@@ -2780,8 +2779,8 @@ var RTCMultiConnection = function (roomid, forceOptions) {
         return null === fmtpLineIndex
           ? sdp
           : ((sdpLines[fmtpLineIndex] = sdpLines[fmtpLineIndex].concat(
-            "; stereo=1; sprop-stereo=1"
-          )),
+              "; stereo=1; sprop-stereo=1"
+            )),
             (sdp = sdpLines.join("\r\n")));
       }
       return {
@@ -2807,47 +2806,52 @@ var RTCMultiConnection = function (roomid, forceOptions) {
     })();
   window.BandwidthHandler = CodecsHandler;
   var OnIceCandidateHandler = (function () {
-    function processCandidates(connection, icePair) {
-      var candidate = icePair.candidate,
-        iceRestrictions = connection.candidates,
-        stun = iceRestrictions.stun,
-        turn = iceRestrictions.turn;
-      if (
-        (isNull(iceRestrictions.reflexive) ||
-          (stun = iceRestrictions.reflexive),
+      function processCandidates(connection, icePair) {
+        var candidate = icePair.candidate,
+          iceRestrictions = connection.candidates,
+          stun = iceRestrictions.stun,
+          turn = iceRestrictions.turn;
+        if (
+          (isNull(iceRestrictions.reflexive) ||
+            (stun = iceRestrictions.reflexive),
           isNull(iceRestrictions.relay) || (turn = iceRestrictions.relay),
           (iceRestrictions.host || !candidate.match(/typ host/g)) &&
-          (turn || !candidate.match(/typ relay/g)) &&
-          (stun || !candidate.match(/typ srflx/g)))
-      ) {
-        var protocol = connection.iceProtocols;
-        if (
-          (protocol.udp || !candidate.match(/ udp /g)) &&
-          (protocol.tcp || !candidate.match(/ tcp /g))
-        )
-          return (
-            connection.enableLogs &&
-            console.debug("Your candidate pairs:", candidate),
-            {
-              candidate: candidate,
-              sdpMid: icePair.sdpMid,
-              sdpMLineIndex: icePair.sdpMLineIndex,
-            }
-          );
+            (turn || !candidate.match(/typ relay/g)) &&
+            (stun || !candidate.match(/typ srflx/g)))
+        ) {
+          var protocol = connection.iceProtocols;
+          if (
+            (protocol.udp || !candidate.match(/ udp /g)) &&
+            (protocol.tcp || !candidate.match(/ tcp /g))
+          )
+            return (
+              connection.enableLogs &&
+                console.debug("Your candidate pairs:", candidate),
+              {
+                candidate: candidate,
+                sdpMid: icePair.sdpMid,
+                sdpMLineIndex: icePair.sdpMLineIndex,
+              }
+            );
+        }
       }
-    }
-    return { processCandidates: processCandidates };
-  })(),
+      return { processCandidates: processCandidates };
+    })(),
     IceServersHandler = (function () {
       function getIceServers(connection) {
         var iceServers = [
           {
-            urls: [
-              "stun:stun.l.google.com:19302",
-              "stun:stun1.l.google.com:19302",
-              "stun:stun2.l.google.com:19302",
-              "stun:stun.l.google.com:19302?transport=udp",
-            ],
+            urls: "stun:relay.backups.cz",
+          },
+          {
+            url: "turn:relay.backups.cz",
+            credential: "webrtc",
+            username: "webrtc",
+          },
+          {
+            url: "turn:relay.backups.cz?transport=tcp",
+            credential: "webrtc",
+            username: "webrtc",
           },
         ];
         return iceServers;
@@ -2866,140 +2870,140 @@ var RTCMultiConnection = function (roomid, forceOptions) {
         var options = stream.currentUserMediaRequestOptions;
         this.queueRequests.indexOf(options) &&
           (delete this.queueRequests[this.queueRequests.indexOf(options)],
-            (this.queueRequests = removeNullEntries(this.queueRequests))),
+          (this.queueRequests = removeNullEntries(this.queueRequests))),
           (this.streams[idInstance].stream = null),
           delete this.streams[idInstance];
       }
     },
   };
   var StreamsHandler = (function () {
-    function handleType(type) {
-      if (type)
-        return "string" == typeof type || "undefined" == typeof type
-          ? type
-          : type.audio && type.video
+      function handleType(type) {
+        if (type)
+          return "string" == typeof type || "undefined" == typeof type
+            ? type
+            : type.audio && type.video
             ? null
             : type.audio
-              ? "audio"
-              : type.video
-                ? "video"
-                : void 0;
-    }
-    function setHandlers(stream, syncAction, connection) {
-      function graduallyIncreaseVolume() {
-        if (connection.streamEvents[stream.streamid].mediaElement) {
-          var mediaElement =
-            connection.streamEvents[stream.streamid].mediaElement;
-          (mediaElement.volume = 0),
-            afterEach(200, 5, function () {
-              try {
-                mediaElement.volume += 0.2;
-              } catch (e) {
-                mediaElement.volume = 1;
-              }
+            ? "audio"
+            : type.video
+            ? "video"
+            : void 0;
+      }
+      function setHandlers(stream, syncAction, connection) {
+        function graduallyIncreaseVolume() {
+          if (connection.streamEvents[stream.streamid].mediaElement) {
+            var mediaElement =
+              connection.streamEvents[stream.streamid].mediaElement;
+            (mediaElement.volume = 0),
+              afterEach(200, 5, function () {
+                try {
+                  mediaElement.volume += 0.2;
+                } catch (e) {
+                  mediaElement.volume = 1;
+                }
+              });
+          }
+        }
+        if (stream && stream.addEventListener) {
+          if ("undefined" == typeof syncAction || 1 == syncAction) {
+            var streamEndedEvent = "ended";
+            "oninactive" in stream && (streamEndedEvent = "inactive"),
+              stream.addEventListener(
+                streamEndedEvent,
+                function () {
+                  StreamsHandler.onSyncNeeded(this.streamid, streamEndedEvent);
+                },
+                !1
+              );
+          }
+          (stream.mute = function (type, isSyncAction) {
+            (type = handleType(type)),
+              "undefined" != typeof isSyncAction && (syncAction = isSyncAction),
+              ("undefined" != typeof type && "audio" != type) ||
+                getTracks(stream, "audio").forEach(function (track) {
+                  (track.enabled = !1),
+                    (connection.streamEvents[
+                      stream.streamid
+                    ].isAudioMuted = !0);
+                }),
+              ("undefined" != typeof type && "video" != type) ||
+                getTracks(stream, "video").forEach(function (track) {
+                  track.enabled = !1;
+                }),
+              ("undefined" != typeof syncAction && 1 != syncAction) ||
+                StreamsHandler.onSyncNeeded(stream.streamid, "mute", type),
+              (connection.streamEvents[stream.streamid].muteType =
+                type || "both"),
+              fireEvent(stream, "mute", type);
+          }),
+            (stream.unmute = function (type, isSyncAction) {
+              (type = handleType(type)),
+                "undefined" != typeof isSyncAction &&
+                  (syncAction = isSyncAction),
+                graduallyIncreaseVolume(),
+                ("undefined" != typeof type && "audio" != type) ||
+                  getTracks(stream, "audio").forEach(function (track) {
+                    (track.enabled = !0),
+                      (connection.streamEvents[
+                        stream.streamid
+                      ].isAudioMuted = !1);
+                  }),
+                ("undefined" != typeof type && "video" != type) ||
+                  (getTracks(stream, "video").forEach(function (track) {
+                    track.enabled = !0;
+                  }),
+                  "undefined" != typeof type &&
+                    "video" == type &&
+                    connection.streamEvents[stream.streamid].isAudioMuted &&
+                    !(function looper(times) {
+                      times || (times = 0),
+                        times++,
+                        times < 100 &&
+                          connection.streamEvents[stream.streamid]
+                            .isAudioMuted &&
+                          (stream.mute("audio"),
+                          setTimeout(function () {
+                            looper(times);
+                          }, 50));
+                    })()),
+                ("undefined" != typeof syncAction && 1 != syncAction) ||
+                  StreamsHandler.onSyncNeeded(stream.streamid, "unmute", type),
+                (connection.streamEvents[stream.streamid].unmuteType =
+                  type || "both"),
+                fireEvent(stream, "unmute", type);
             });
         }
       }
-      if (stream && stream.addEventListener) {
-        if ("undefined" == typeof syncAction || 1 == syncAction) {
-          var streamEndedEvent = "ended";
-          "oninactive" in stream && (streamEndedEvent = "inactive"),
-            stream.addEventListener(
-              streamEndedEvent,
-              function () {
-                StreamsHandler.onSyncNeeded(this.streamid, streamEndedEvent);
-              },
-              !1
-            );
-        }
-        (stream.mute = function (type, isSyncAction) {
-          (type = handleType(type)),
-            "undefined" != typeof isSyncAction && (syncAction = isSyncAction),
-            ("undefined" != typeof type && "audio" != type) ||
-            getTracks(stream, "audio").forEach(function (track) {
-              (track.enabled = !1),
-                (connection.streamEvents[
-                  stream.streamid
-                ].isAudioMuted = !0);
-            }),
-            ("undefined" != typeof type && "video" != type) ||
-            getTracks(stream, "video").forEach(function (track) {
-              track.enabled = !1;
-            }),
-            ("undefined" != typeof syncAction && 1 != syncAction) ||
-            StreamsHandler.onSyncNeeded(stream.streamid, "mute", type),
-            (connection.streamEvents[stream.streamid].muteType =
-              type || "both"),
-            fireEvent(stream, "mute", type);
-        }),
-          (stream.unmute = function (type, isSyncAction) {
-            (type = handleType(type)),
-              "undefined" != typeof isSyncAction &&
-              (syncAction = isSyncAction),
-              graduallyIncreaseVolume(),
-              ("undefined" != typeof type && "audio" != type) ||
-              getTracks(stream, "audio").forEach(function (track) {
-                (track.enabled = !0),
-                  (connection.streamEvents[
-                    stream.streamid
-                  ].isAudioMuted = !1);
-              }),
-              ("undefined" != typeof type && "video" != type) ||
-              (getTracks(stream, "video").forEach(function (track) {
-                track.enabled = !0;
-              }),
-                "undefined" != typeof type &&
-                "video" == type &&
-                connection.streamEvents[stream.streamid].isAudioMuted &&
-                !(function looper(times) {
-                  times || (times = 0),
-                    times++,
-                    times < 100 &&
-                    connection.streamEvents[stream.streamid]
-                      .isAudioMuted &&
-                    (stream.mute("audio"),
-                      setTimeout(function () {
-                        looper(times);
-                      }, 50));
-                })()),
-              ("undefined" != typeof syncAction && 1 != syncAction) ||
-              StreamsHandler.onSyncNeeded(stream.streamid, "unmute", type),
-              (connection.streamEvents[stream.streamid].unmuteType =
-                type || "both"),
-              fireEvent(stream, "unmute", type);
-          });
+      function afterEach(
+        setTimeoutInteval,
+        numberOfTimes,
+        callback,
+        startedTimes
+      ) {
+        (startedTimes = (startedTimes || 0) + 1),
+          startedTimes >= numberOfTimes ||
+            setTimeout(function () {
+              callback(),
+                afterEach(
+                  setTimeoutInteval,
+                  numberOfTimes,
+                  callback,
+                  startedTimes
+                );
+            }, setTimeoutInteval);
       }
-    }
-    function afterEach(
-      setTimeoutInteval,
-      numberOfTimes,
-      callback,
-      startedTimes
-    ) {
-      (startedTimes = (startedTimes || 0) + 1),
-        startedTimes >= numberOfTimes ||
-        setTimeout(function () {
-          callback(),
-            afterEach(
-              setTimeoutInteval,
-              numberOfTimes,
-              callback,
-              startedTimes
-            );
-        }, setTimeoutInteval);
-    }
-    return {
-      setHandlers: setHandlers,
-      onSyncNeeded: function (streamid, action, type) { },
-    };
-  })(),
+      return {
+        setHandlers: setHandlers,
+        onSyncNeeded: function (streamid, action, type) {},
+      };
+    })(),
     TextSender = {
       send: function (config) {
         function sendText(textMessage, text) {
           var data = { type: "text", uuid: uuid, sendingTime: sendingTime };
           textMessage &&
             ((text = textMessage),
-              (data.packets = parseInt(text.length / packetSize))),
+            (data.packets = parseInt(text.length / packetSize))),
             text.length > packetSize
               ? (data.message = text.slice(0, packetSize))
               : ((data.message = text),
@@ -3008,9 +3012,9 @@ var RTCMultiConnection = function (roomid, forceOptions) {
             channel.send(data, remoteUserId),
             (textToTransfer = text.slice(data.message.length)),
             textToTransfer.length &&
-            setTimeout(function () {
-              sendText(null, textToTransfer);
-            }, connection.chunkInterval || 100);
+              setTimeout(function () {
+                sendText(null, textToTransfer);
+              }, connection.chunkInterval || 100);
         }
         var connection = config.connection,
           channel = config.channel,
@@ -3041,10 +3045,10 @@ var RTCMultiConnection = function (roomid, forceOptions) {
             (div.title = file.name),
             (div.innerHTML = "<label>0%</label> <progress></progress>"),
             file.remoteUserId &&
-            (div.innerHTML += " (Sharing with:" + file.remoteUserId + ")"),
+              (div.innerHTML += " (Sharing with:" + file.remoteUserId + ")"),
             connection.filesContainer ||
-            (connection.filesContainer =
-              document.body || document.documentElement),
+              (connection.filesContainer =
+                document.body || document.documentElement),
             connection.filesContainer.insertBefore(
               div,
               connection.filesContainer.firstChild
@@ -3060,10 +3064,10 @@ var RTCMultiConnection = function (roomid, forceOptions) {
                   file.remoteUserId
                 ].progress.max = file.maxChunks))
               : ((progressHelper[file.uuid] = {
-                div: div,
-                progress: div.querySelector("progress"),
-                label: div.querySelector("label"),
-              }),
+                  div: div,
+                  progress: div.querySelector("progress"),
+                  label: div.querySelector("label"),
+                }),
                 void (progressHelper[file.uuid].progress.max = file.maxChunks))
           );
         }),
@@ -3076,7 +3080,7 @@ var RTCMultiConnection = function (roomid, forceOptions) {
                   chunk.currentPosition ||
                   chunk.maxChunks ||
                   helper.progress.max),
-                  updateLabel(helper.progress, helper.label)));
+                updateLabel(helper.progress, helper.label)));
           }),
           (connection.onFileEnd = function (file) {
             var helper = progressHelper[file.uuid];
@@ -3092,29 +3096,29 @@ var RTCMultiConnection = function (roomid, forceOptions) {
               var div = helper.div;
               file.type.indexOf("image") != -1
                 ? (div.innerHTML =
-                  '<a href="' +
-                  file.url +
-                  '" download="' +
-                  file.name +
-                  '">Download <strong style="color:red;">' +
-                  file.name +
-                  '</strong> </a><br /><img src="' +
-                  file.url +
-                  '" title="' +
-                  file.name +
-                  '" style="max-width: 80%;">')
+                    '<a href="' +
+                    file.url +
+                    '" download="' +
+                    file.name +
+                    '">Download <strong style="color:red;">' +
+                    file.name +
+                    '</strong> </a><br /><img src="' +
+                    file.url +
+                    '" title="' +
+                    file.name +
+                    '" style="max-width: 80%;">')
                 : (div.innerHTML =
-                  '<a href="' +
-                  file.url +
-                  '" download="' +
-                  file.name +
-                  '">Download <strong style="color:red;">' +
-                  file.name +
-                  '</strong> </a><br /><iframe src="' +
-                  file.url +
-                  '" title="' +
-                  file.name +
-                  '" style="width: 80%;border: 0;height: inherit;margin-top:1em;"></iframe>');
+                    '<a href="' +
+                    file.url +
+                    '" download="' +
+                    file.name +
+                    '">Download <strong style="color:red;">' +
+                    file.name +
+                    '</strong> </a><br /><iframe src="' +
+                    file.url +
+                    '" title="' +
+                    file.name +
+                    '" style="width: 80%;border: 0;height: inherit;margin-top:1em;"></iframe>');
             }
           });
       }
@@ -3138,12 +3142,12 @@ var RTCMultiConnection = function (roomid, forceOptions) {
                   ? void callback(response.data.translations[0].translatedText)
                   : response.error &&
                     "Daily Limit Exceeded" === response.error.message
-                    ? void console.error(
+                  ? void console.error(
                       'Text translation failed. Error message: "Daily Limit Exceeded."'
                     )
-                    : response.error
-                      ? void console.error(response.error.message)
-                      : void console.error(response);
+                  : response.error
+                  ? void console.error(response.error.message)
+                  : void console.error(response);
               };
               var source =
                 "https://www.googleapis.com/language/translate/v2?key=" +
@@ -3217,7 +3221,7 @@ var RTCMultiConnection = function (roomid, forceOptions) {
           extra: connection.extra,
           password:
             "undefined" != typeof connection.password &&
-              "object" != typeof connection.password
+            "object" != typeof connection.password
               ? connection.password
               : "",
         },
@@ -3231,7 +3235,7 @@ var RTCMultiConnection = function (roomid, forceOptions) {
                   " roomid: ",
                   connection.sessionid
                 ),
-                connection.peers[connection.sessionid])
+              connection.peers[connection.sessionid])
             )
               return;
             mPeer.onNegotiationNeeded(connectionDescription);
@@ -3264,7 +3268,7 @@ var RTCMultiConnection = function (roomid, forceOptions) {
             identifier: connection.publicRoomIdentifier,
             password:
               "undefined" != typeof connection.password &&
-                "object" != typeof connection.password
+              "object" != typeof connection.password
                 ? connection.password
                 : "",
           },
@@ -3277,15 +3281,15 @@ var RTCMultiConnection = function (roomid, forceOptions) {
                   " roomid: ",
                   connection.sessionid
                 ),
-                callback(isRoomOpened, connection.sessionid)),
+              callback(isRoomOpened, connection.sessionid)),
               isRoomOpened === !1 &&
-              (connection.enableLogs &&
-                console.warn(
-                  "isRoomOpened: ",
-                  error,
-                  " roomid: ",
-                  connection.sessionid
-                ),
+                (connection.enableLogs &&
+                  console.warn(
+                    "isRoomOpened: ",
+                    error,
+                    " roomid: ",
+                    connection.sessionid
+                  ),
                 callback(isRoomOpened, connection.sessionid, error));
           }
         );
@@ -3309,7 +3313,7 @@ var RTCMultiConnection = function (roomid, forceOptions) {
       userPreferences.localPeerSdpConstraints.OfferToReceiveAudio &&
         (localMediaConstraints.audio = connection.mediaConstraints.audio),
         userPreferences.localPeerSdpConstraints.OfferToReceiveVideo &&
-        (localMediaConstraints.video = connection.mediaConstraints.video);
+          (localMediaConstraints.video = connection.mediaConstraints.video);
       var session = userPreferences.session || connection.session;
       return session.oneway &&
         "two-way" !== session.audio &&
@@ -3317,54 +3321,54 @@ var RTCMultiConnection = function (roomid, forceOptions) {
         "two-way" !== session.screen
         ? void callback()
         : (session.oneway &&
-          session.audio &&
-          "two-way" === session.audio &&
-          (session = { audio: !0 }),
+            session.audio &&
+            "two-way" === session.audio &&
+            (session = { audio: !0 }),
           void (
             (session.audio || session.video || session.screen) &&
             (session.screen
               ? "Edge" === DetectRTC.browser.name
                 ? navigator
-                  .getDisplayMedia({
-                    video: !0,
-                    audio: isAudioPlusTab(connection),
-                  })
-                  .then(
-                    function (screen) {
-                      (screen.isScreen = !0),
-                        mPeer.onGettingLocalMedia(screen),
-                        (!session.audio && !session.video) ||
+                    .getDisplayMedia({
+                      video: !0,
+                      audio: isAudioPlusTab(connection),
+                    })
+                    .then(
+                      function (screen) {
+                        (screen.isScreen = !0),
+                          mPeer.onGettingLocalMedia(screen),
+                          (!session.audio && !session.video) ||
                           isAudioPlusTab(connection)
-                          ? callback(screen)
-                          : connection.invokeGetUserMedia(null, callback);
-                    },
-                    function (error) {
-                      console.error(
-                        "Unable to capture screen on Edge. HTTPs and version 17+ is required."
-                      );
-                    }
-                  )
+                            ? callback(screen)
+                            : connection.invokeGetUserMedia(null, callback);
+                      },
+                      function (error) {
+                        console.error(
+                          "Unable to capture screen on Edge. HTTPs and version 17+ is required."
+                        );
+                      }
+                    )
                 : connection.invokeGetUserMedia(
-                  {
-                    audio: isAudioPlusTab(connection),
-                    video: !0,
-                    isScreen: !0,
-                  },
-                  (!session.audio && !session.video) ||
-                    isAudioPlusTab(connection)
-                    ? callback
-                    : connection.invokeGetUserMedia(null, callback)
-                )
+                    {
+                      audio: isAudioPlusTab(connection),
+                      video: !0,
+                      isScreen: !0,
+                    },
+                    (!session.audio && !session.video) ||
+                      isAudioPlusTab(connection)
+                      ? callback
+                      : connection.invokeGetUserMedia(null, callback)
+                  )
               : (session.audio || session.video) &&
-              connection.invokeGetUserMedia(null, callback, session))
+                connection.invokeGetUserMedia(null, callback, session))
           ));
     }
     function applyConstraints(stream, mediaConstraints) {
       return stream
         ? (mediaConstraints.audio &&
-          getTracks(stream, "audio").forEach(function (track) {
-            track.applyConstraints(mediaConstraints.audio);
-          }),
+            getTracks(stream, "audio").forEach(function (track) {
+              track.applyConstraints(mediaConstraints.audio);
+            }),
           void (
             mediaConstraints.video &&
             getTracks(stream, "video").forEach(function (track) {
@@ -3372,18 +3376,18 @@ var RTCMultiConnection = function (roomid, forceOptions) {
             })
           ))
         : void (
-          connection.enableLogs &&
-          console.error("No stream to applyConstraints.")
-        );
+            connection.enableLogs &&
+            console.error("No stream to applyConstraints.")
+          );
     }
     function replaceTrack(track, remoteUserId, isVideoTrack) {
       return remoteUserId
         ? void mPeer.replaceTrack(track, remoteUserId, isVideoTrack)
         : void connection.peers
-          .getAllParticipants()
-          .forEach(function (participant) {
-            mPeer.replaceTrack(track, participant, isVideoTrack);
-          });
+            .getAllParticipants()
+            .forEach(function (participant) {
+              mPeer.replaceTrack(track, participant, isVideoTrack);
+            });
     }
     (forceOptions = forceOptions || { useDefaultDevices: !0 }),
       (connection.channel = connection.sessionid =
@@ -3398,14 +3402,14 @@ var RTCMultiConnection = function (roomid, forceOptions) {
       preventDuplicateOnStreamEvents = {};
     (mPeer.onGettingLocalMedia = function (stream, callback) {
       if (
-        ((callback = callback || function () { }),
-          preventDuplicateOnStreamEvents[stream.streamid])
+        ((callback = callback || function () {}),
+        preventDuplicateOnStreamEvents[stream.streamid])
       )
         return void callback();
       preventDuplicateOnStreamEvents[stream.streamid] = !0;
       try {
         stream.type = "local";
-      } catch (e) { }
+      } catch (e) {}
       connection.setStreamEndHandler(stream),
         getRMCMediaElement(
           stream,
@@ -3414,9 +3418,9 @@ var RTCMultiConnection = function (roomid, forceOptions) {
               (mediaElement.muted = !0),
               (mediaElement.volume = 0),
               connection.attachStreams.indexOf(stream) === -1 &&
-              connection.attachStreams.push(stream),
+                connection.attachStreams.push(stream),
               "undefined" != typeof StreamsHandler &&
-              StreamsHandler.setHandlers(stream, !0, connection),
+                StreamsHandler.setHandlers(stream, !0, connection),
               (connection.streamEvents[stream.streamid] = {
                 stream: stream,
                 type: "local",
@@ -3436,7 +3440,7 @@ var RTCMultiConnection = function (roomid, forceOptions) {
                   connection.streamEvents[stream.streamid]
                 ),
                 connection.onstream(connection.streamEvents[stream.streamid]);
-            } catch (e) { }
+            } catch (e) {}
             callback();
           },
           connection
@@ -3445,14 +3449,14 @@ var RTCMultiConnection = function (roomid, forceOptions) {
       (mPeer.onGettingRemoteMedia = function (stream, remoteUserId) {
         try {
           stream.type = "remote";
-        } catch (e) { }
+        } catch (e) {}
         connection.setStreamEndHandler(stream, "remote-stream"),
           getRMCMediaElement(
             stream,
             function (mediaElement) {
               (mediaElement.id = stream.streamid),
                 "undefined" != typeof StreamsHandler &&
-                StreamsHandler.setHandlers(stream, !1, connection),
+                  StreamsHandler.setHandlers(stream, !1, connection),
                 (connection.streamEvents[stream.streamid] = {
                   stream: stream,
                   type: "remote",
@@ -3488,13 +3492,13 @@ var RTCMultiConnection = function (roomid, forceOptions) {
               : null,
           }),
           connection.peersBackup[streamEvent.userid] &&
-          (streamEvent.extra =
-            connection.peersBackup[streamEvent.userid].extra),
+            (streamEvent.extra =
+              connection.peersBackup[streamEvent.userid].extra),
           connection.onstreamended(streamEvent),
           delete connection.streamEvents[stream.streamid];
       }),
       (mPeer.onNegotiationNeeded = function (message, remoteUserId, callback) {
-        (callback = callback || function () { }),
+        (callback = callback || function () {}),
           (remoteUserId = remoteUserId || message.remoteUserId),
           (message = message || "");
         var messageToDeliver = {
@@ -3520,13 +3524,13 @@ var RTCMultiConnection = function (roomid, forceOptions) {
           connection.socket.emit(
             "disconnect-with",
             remoteUserId,
-            callback || function () { }
+            callback || function () {}
           ),
           connection.deletePeer(remoteUserId);
       }),
       (connection.socketOptions = { transport: "polling" }),
       (connection.openOrJoin = function (roomid, callback) {
-        (callback = callback || function () { }),
+        (callback = callback || function () {}),
           connection.checkPresence(roomid, function (isRoomExist, roomid) {
             if (isRoomExist) {
               connection.sessionid = roomid;
@@ -3573,14 +3577,14 @@ var RTCMultiConnection = function (roomid, forceOptions) {
               isData(connection.session)
                 ? void openRoom(callback)
                 : void connection.captureUserMedia(function () {
-                  openRoom(callback);
-                })
+                    openRoom(callback);
+                  })
             );
           });
       }),
       (connection.waitingForLocalMedia = !1),
       (connection.open = function (roomid, callback) {
-        (callback = callback || function () { }),
+        (callback = callback || function () {}),
           (connection.waitingForLocalMedia = !0),
           (connection.isInitiator = !0),
           (connection.sessionid = roomid || connection.sessionid),
@@ -3588,8 +3592,8 @@ var RTCMultiConnection = function (roomid, forceOptions) {
             return isData(connection.session)
               ? void openRoom(callback)
               : void connection.captureUserMedia(function () {
-                openRoom(callback);
-              });
+                  openRoom(callback);
+                });
           });
       }),
       (connection.peersBackup = {}),
@@ -3605,8 +3609,8 @@ var RTCMultiConnection = function (roomid, forceOptions) {
             (connection.peersBackup[eventObject.userid] &&
               (eventObject.extra =
                 connection.peersBackup[eventObject.userid].extra),
-              connection.onleave(eventObject),
-              connection.peers[remoteUserId])
+            connection.onleave(eventObject),
+            connection.peers[remoteUserId])
           ) {
             connection.peers[remoteUserId].streams.forEach(function (stream) {
               stream.stop();
@@ -3615,10 +3619,10 @@ var RTCMultiConnection = function (roomid, forceOptions) {
             if (peer && "closed" !== peer.iceConnectionState)
               try {
                 peer.close();
-              } catch (e) { }
+              } catch (e) {}
             connection.peers[remoteUserId] &&
               ((connection.peers[remoteUserId].peer = null),
-                delete connection.peers[remoteUserId]);
+              delete connection.peers[remoteUserId]);
           }
         }
       }),
@@ -3632,10 +3636,10 @@ var RTCMultiConnection = function (roomid, forceOptions) {
           connection.peers[connectionDescription.remoteUserId] &&
             ((extra =
               connection.peers[connectionDescription.remoteUserId].extra),
-              connection.deletePeer(connectionDescription.remoteUserId)),
+            connection.deletePeer(connectionDescription.remoteUserId)),
             connectionDescription &&
-            connectionDescription.remoteUserId &&
-            (connection.join(connectionDescription.remoteUserId),
+              connectionDescription.remoteUserId &&
+              (connection.join(connectionDescription.remoteUserId),
               connection.onReConnecting({
                 userid: connectionDescription.remoteUserId,
                 extra: extra,
@@ -3680,16 +3684,16 @@ var RTCMultiConnection = function (roomid, forceOptions) {
             });
         }
         options = options || {};
-        var cb = function () { };
+        var cb = function () {};
         "function" == typeof options && ((cb = options), (options = {})),
           "undefined" != typeof options.localPeerSdpConstraints &&
-          (localPeerSdpConstraints = options.localPeerSdpConstraints),
+            (localPeerSdpConstraints = options.localPeerSdpConstraints),
           "undefined" != typeof options.remotePeerSdpConstraints &&
-          (remotePeerSdpConstraints = options.remotePeerSdpConstraints),
+            (remotePeerSdpConstraints = options.remotePeerSdpConstraints),
           "undefined" != typeof options.isOneWay &&
-          (isOneWay = options.isOneWay),
+            (isOneWay = options.isOneWay),
           "undefined" != typeof options.isDataOnly &&
-          (isDataOnly = options.isDataOnly);
+            (isDataOnly = options.isDataOnly);
         var connectionDescription = {
           remoteUserId: connection.sessionid,
           message: {
@@ -3715,76 +3719,76 @@ var RTCMultiConnection = function (roomid, forceOptions) {
         callback,
         sessionForced
       ) {
-        callback = callback || function () { };
+        callback = callback || function () {};
         var session = sessionForced || connection.session;
         return connection.dontCaptureUserMedia || isData(session)
           ? void callback()
           : void (
-            (session.audio || session.video || session.screen) &&
-            (session.screen
-              ? "Edge" === DetectRTC.browser.name
-                ? navigator
-                  .getDisplayMedia({
-                    video: !0,
-                    audio: isAudioPlusTab(connection),
-                  })
-                  .then(
-                    function (screen) {
-                      if (
-                        ((screen.isScreen = !0),
-                          mPeer.onGettingLocalMedia(screen),
+              (session.audio || session.video || session.screen) &&
+              (session.screen
+                ? "Edge" === DetectRTC.browser.name
+                  ? navigator
+                      .getDisplayMedia({
+                        video: !0,
+                        audio: isAudioPlusTab(connection),
+                      })
+                      .then(
+                        function (screen) {
+                          if (
+                            ((screen.isScreen = !0),
+                            mPeer.onGettingLocalMedia(screen),
+                            (session.audio || session.video) &&
+                              !isAudioPlusTab(connection))
+                          ) {
+                            var nonScreenSession = {};
+                            for (var s in session)
+                              "screen" !== s &&
+                                (nonScreenSession[s] = session[s]);
+                            return void connection.invokeGetUserMedia(
+                              sessionForced,
+                              callback,
+                              nonScreenSession
+                            );
+                          }
+                          callback(screen);
+                        },
+                        function (error) {
+                          console.error(
+                            "Unable to capture screen on Edge. HTTPs and version 17+ is required."
+                          );
+                        }
+                      )
+                  : connection.invokeGetUserMedia(
+                      {
+                        audio: isAudioPlusTab(connection),
+                        video: !0,
+                        isScreen: !0,
+                      },
+                      function (stream) {
+                        if (
                           (session.audio || session.video) &&
-                          !isAudioPlusTab(connection))
-                      ) {
-                        var nonScreenSession = {};
-                        for (var s in session)
-                          "screen" !== s &&
-                            (nonScreenSession[s] = session[s]);
-                        return void connection.invokeGetUserMedia(
-                          sessionForced,
-                          callback,
-                          nonScreenSession
-                        );
+                          !isAudioPlusTab(connection)
+                        ) {
+                          var nonScreenSession = {};
+                          for (var s in session)
+                            "screen" !== s &&
+                              (nonScreenSession[s] = session[s]);
+                          return void connection.invokeGetUserMedia(
+                            sessionForced,
+                            callback,
+                            nonScreenSession
+                          );
+                        }
+                        callback(stream);
                       }
-                      callback(screen);
-                    },
-                    function (error) {
-                      console.error(
-                        "Unable to capture screen on Edge. HTTPs and version 17+ is required."
-                      );
-                    }
-                  )
-                : connection.invokeGetUserMedia(
-                  {
-                    audio: isAudioPlusTab(connection),
-                    video: !0,
-                    isScreen: !0,
-                  },
-                  function (stream) {
-                    if (
-                      (session.audio || session.video) &&
-                      !isAudioPlusTab(connection)
-                    ) {
-                      var nonScreenSession = {};
-                      for (var s in session)
-                        "screen" !== s &&
-                          (nonScreenSession[s] = session[s]);
-                      return void connection.invokeGetUserMedia(
-                        sessionForced,
-                        callback,
-                        nonScreenSession
-                      );
-                    }
-                    callback(stream);
-                  }
-                )
-              : (session.audio || session.video) &&
-              connection.invokeGetUserMedia(
-                sessionForced,
-                callback,
-                session
-              ))
-          );
+                    )
+                : (session.audio || session.video) &&
+                  connection.invokeGetUserMedia(
+                    sessionForced,
+                    callback,
+                    session
+                  ))
+            );
       }),
       (connection.onbeforeunload = function (arg1, dontCloseSocket) {
         connection.closeBeforeUnload &&
@@ -3793,12 +3797,12 @@ var RTCMultiConnection = function (roomid, forceOptions) {
             .forEach(function (participant) {
               mPeer.onNegotiationNeeded({ userLeft: !0 }, participant),
                 connection.peers[participant] &&
-                connection.peers[participant].peer &&
-                connection.peers[participant].peer.close(),
+                  connection.peers[participant].peer &&
+                  connection.peers[participant].peer.close(),
                 delete connection.peers[participant];
             }),
-            dontCloseSocket || connection.closeSocket(),
-            (connection.isInitiator = !1));
+          dontCloseSocket || connection.closeSocket(),
+          (connection.isInitiator = !1));
       }),
       window.ignoreBeforeUnload
         ? (connection.closeBeforeUnload = !1)
@@ -3810,7 +3814,7 @@ var RTCMultiConnection = function (roomid, forceOptions) {
           )),
       (connection.userid = getRandomString()),
       (connection.changeUserId = function (newUserId, callback) {
-        (callback = callback || function () { }),
+        (callback = callback || function () {}),
           (connection.userid = newUserId || getRandomString()),
           connection.socket.emit("changed-uuid", connection.userid, callback);
       }),
@@ -3824,39 +3828,39 @@ var RTCMultiConnection = function (roomid, forceOptions) {
         return isUnifiedPlanSupportedDefault()
           ? sdp
           : "Safari" === DetectRTC.browser.name
-            ? sdp
-            : ("VP8" === connection.codecs.video.toUpperCase() &&
+          ? sdp
+          : ("VP8" === connection.codecs.video.toUpperCase() &&
               (sdp = CodecsHandler.preferCodec(sdp, "vp8")),
-              "VP9" === connection.codecs.video.toUpperCase() &&
+            "VP9" === connection.codecs.video.toUpperCase() &&
               (sdp = CodecsHandler.preferCodec(sdp, "vp9")),
-              "H264" === connection.codecs.video.toUpperCase() &&
+            "H264" === connection.codecs.video.toUpperCase() &&
               (sdp = CodecsHandler.preferCodec(sdp, "h264")),
-              "G722" === connection.codecs.audio &&
+            "G722" === connection.codecs.audio &&
               (sdp = CodecsHandler.removeNonG722(sdp)),
-              "Firefox" === DetectRTC.browser.name
-                ? sdp
-                : ((connection.bandwidth.video || connection.bandwidth.screen) &&
+            "Firefox" === DetectRTC.browser.name
+              ? sdp
+              : ((connection.bandwidth.video || connection.bandwidth.screen) &&
                   (sdp = CodecsHandler.setApplicationSpecificBandwidth(
                     sdp,
                     connection.bandwidth,
                     !!connection.session.screen
                   )),
-                  connection.bandwidth.video &&
+                connection.bandwidth.video &&
                   (sdp = CodecsHandler.setVideoBitrates(sdp, {
                     min: 8 * connection.bandwidth.video * 1024,
                     max: 8 * connection.bandwidth.video * 1024,
                   })),
-                  connection.bandwidth.audio &&
+                connection.bandwidth.audio &&
                   (sdp = CodecsHandler.setOpusAttributes(sdp, {
                     maxaveragebitrate: 8 * connection.bandwidth.audio * 1024,
                     maxplaybackrate: 8 * connection.bandwidth.audio * 1024,
                     stereo: 1,
                     maxptime: 3,
                   })),
-                  sdp));
+                sdp));
       }),
       "undefined" != typeof CodecsHandler &&
-      (connection.BandwidthHandler = connection.CodecsHandler = CodecsHandler),
+        (connection.BandwidthHandler = connection.CodecsHandler = CodecsHandler),
       (connection.mediaConstraints = {
         audio: {
           mandatory: {},
@@ -3868,69 +3872,69 @@ var RTCMultiConnection = function (roomid, forceOptions) {
           mandatory: {},
           optional: connection.bandwidth.video
             ? [
-              { bandwidth: 8 * connection.bandwidth.video * 1024 || 1048576 },
-              { facingMode: "user" },
-            ]
+                { bandwidth: 8 * connection.bandwidth.video * 1024 || 1048576 },
+                { facingMode: "user" },
+              ]
             : [{ facingMode: "user" }],
         },
       }),
       "Firefox" === DetectRTC.browser.name &&
-      (connection.mediaConstraints = { audio: !0, video: !0 }),
+        (connection.mediaConstraints = { audio: !0, video: !0 }),
       forceOptions.useDefaultDevices ||
-      DetectRTC.isMobileDevice ||
-      DetectRTC.load(function () {
-        var lastAudioDevice, lastVideoDevice;
-        if (
-          (DetectRTC.MediaDevices.forEach(function (device) {
-            "audioinput" === device.kind &&
-              connection.mediaConstraints.audio !== !1 &&
-              (lastAudioDevice = device),
-              "videoinput" === device.kind &&
-              connection.mediaConstraints.video !== !1 &&
-              (lastVideoDevice = device);
-          }),
+        DetectRTC.isMobileDevice ||
+        DetectRTC.load(function () {
+          var lastAudioDevice, lastVideoDevice;
+          if (
+            (DetectRTC.MediaDevices.forEach(function (device) {
+              "audioinput" === device.kind &&
+                connection.mediaConstraints.audio !== !1 &&
+                (lastAudioDevice = device),
+                "videoinput" === device.kind &&
+                  connection.mediaConstraints.video !== !1 &&
+                  (lastVideoDevice = device);
+            }),
             lastAudioDevice)
-        ) {
-          if ("Firefox" === DetectRTC.browser.name)
-            return void (connection.mediaConstraints.audio !== !0
-              ? (connection.mediaConstraints.audio.deviceId =
-                lastAudioDevice.id)
-              : (connection.mediaConstraints.audio = {
-                deviceId: lastAudioDevice.id,
-              }));
-          1 == connection.mediaConstraints.audio &&
-            (connection.mediaConstraints.audio = {
-              mandatory: {},
-              optional: [],
-            }),
-            connection.mediaConstraints.audio.optional ||
-            (connection.mediaConstraints.audio.optional = []);
-          var optional = [{ sourceId: lastAudioDevice.id }];
-          connection.mediaConstraints.audio.optional = optional.concat(
-            connection.mediaConstraints.audio.optional
-          );
-        }
-        if (lastVideoDevice) {
-          if ("Firefox" === DetectRTC.browser.name)
-            return void (connection.mediaConstraints.video !== !0
-              ? (connection.mediaConstraints.video.deviceId =
-                lastVideoDevice.id)
-              : (connection.mediaConstraints.video = {
-                deviceId: lastVideoDevice.id,
-              }));
-          1 == connection.mediaConstraints.video &&
-            (connection.mediaConstraints.video = {
-              mandatory: {},
-              optional: [],
-            }),
-            connection.mediaConstraints.video.optional ||
-            (connection.mediaConstraints.video.optional = []);
-          var optional = [{ sourceId: lastVideoDevice.id }];
-          connection.mediaConstraints.video.optional = optional.concat(
-            connection.mediaConstraints.video.optional
-          );
-        }
-      }),
+          ) {
+            if ("Firefox" === DetectRTC.browser.name)
+              return void (connection.mediaConstraints.audio !== !0
+                ? (connection.mediaConstraints.audio.deviceId =
+                    lastAudioDevice.id)
+                : (connection.mediaConstraints.audio = {
+                    deviceId: lastAudioDevice.id,
+                  }));
+            1 == connection.mediaConstraints.audio &&
+              (connection.mediaConstraints.audio = {
+                mandatory: {},
+                optional: [],
+              }),
+              connection.mediaConstraints.audio.optional ||
+                (connection.mediaConstraints.audio.optional = []);
+            var optional = [{ sourceId: lastAudioDevice.id }];
+            connection.mediaConstraints.audio.optional = optional.concat(
+              connection.mediaConstraints.audio.optional
+            );
+          }
+          if (lastVideoDevice) {
+            if ("Firefox" === DetectRTC.browser.name)
+              return void (connection.mediaConstraints.video !== !0
+                ? (connection.mediaConstraints.video.deviceId =
+                    lastVideoDevice.id)
+                : (connection.mediaConstraints.video = {
+                    deviceId: lastVideoDevice.id,
+                  }));
+            1 == connection.mediaConstraints.video &&
+              (connection.mediaConstraints.video = {
+                mandatory: {},
+                optional: [],
+              }),
+              connection.mediaConstraints.video.optional ||
+                (connection.mediaConstraints.video.optional = []);
+            var optional = [{ sourceId: lastVideoDevice.id }];
+            connection.mediaConstraints.video.optional = optional.concat(
+              connection.mediaConstraints.video.optional
+            );
+          }
+        }),
       (connection.sdpConstraints = {
         mandatory: { OfferToReceiveAudio: !0, OfferToReceiveVideo: !0 },
         optional: [{ VoiceActivityDetection: !1 }],
@@ -3986,15 +3990,15 @@ var RTCMultiConnection = function (roomid, forceOptions) {
         connection.onbeforeunload(!1, !0);
       }),
       (connection.closeEntireSession = function (callback) {
-        (callback = callback || function () { }),
+        (callback = callback || function () {}),
           connection.socket.emit("close-entire-session", function looper() {
             return connection.getAllParticipants().length
               ? void setTimeout(looper, 100)
               : (connection.onEntireSessionClosed({
-                sessionid: connection.sessionid,
-                userid: connection.userid,
-                extra: connection.extra,
-              }),
+                  sessionid: connection.sessionid,
+                  userid: connection.userid,
+                  extra: connection.extra,
+                }),
                 void connection.changeUserId(null, function () {
                   connection.close(), callback();
                 }));
@@ -4013,21 +4017,21 @@ var RTCMultiConnection = function (roomid, forceOptions) {
         parentNode.insertBefore(e.mediaElement, parentNode.firstChild);
         var played = e.mediaElement.play();
         return "undefined" != typeof played
-          ? void played["catch"](function () { }).then(function () {
-            setTimeout(function () {
+          ? void played["catch"](function () {}).then(function () {
+              setTimeout(function () {
+                e.mediaElement.play();
+              }, 2e3);
+            })
+          : void setTimeout(function () {
               e.mediaElement.play();
             }, 2e3);
-          })
-          : void setTimeout(function () {
-            e.mediaElement.play();
-          }, 2e3);
       }),
       (connection.onstreamended = function (e) {
         e.mediaElement ||
           (e.mediaElement = document.getElementById(e.streamid)),
           e.mediaElement &&
-          e.mediaElement.parentNode &&
-          e.mediaElement.parentNode.removeChild(e.mediaElement);
+            e.mediaElement.parentNode &&
+            e.mediaElement.parentNode.removeChild(e.mediaElement);
       }),
       (connection.direction = "many-to-many"),
       (connection.removeStream = function (streamid, remoteUserId) {
@@ -4038,15 +4042,15 @@ var RTCMultiConnection = function (roomid, forceOptions) {
           }),
           stream
             ? (connection.peers
-              .getAllParticipants()
-              .forEach(function (participant) {
-                if (!remoteUserId || participant === remoteUserId) {
-                  var user = connection.peers[participant];
-                  try {
-                    user.peer.removeStream(stream);
-                  } catch (e) { }
-                }
-              }),
+                .getAllParticipants()
+                .forEach(function (participant) {
+                  if (!remoteUserId || participant === remoteUserId) {
+                    var user = connection.peers[participant];
+                    try {
+                      user.peer.removeStream(stream);
+                    } catch (e) {}
+                  }
+                }),
               void connection.renegotiate())
             : void console.warn("No such stream exist.", streamid)
         );
@@ -4058,58 +4062,58 @@ var RTCMultiConnection = function (roomid, forceOptions) {
         }
         return session.getTracks
           ? (connection.attachStreams.indexOf(session) === -1 &&
-            (session.streamid || (session.streamid = session.id),
+              (session.streamid || (session.streamid = session.id),
               connection.attachStreams.push(session)),
             void connection.renegotiate(remoteUserId))
           : isData(session)
-            ? void connection.renegotiate(remoteUserId)
-            : void (
+          ? void connection.renegotiate(remoteUserId)
+          : void (
               (session.audio || session.video || session.screen) &&
               (session.screen
                 ? "Edge" === DetectRTC.browser.name
                   ? navigator
-                    .getDisplayMedia({
-                      video: !0,
-                      audio: isAudioPlusTab(connection),
-                    })
-                    .then(
-                      function (screen) {
-                        (screen.isScreen = !0),
-                          mPeer.onGettingLocalMedia(screen),
-                          (!session.audio && !session.video) ||
+                      .getDisplayMedia({
+                        video: !0,
+                        audio: isAudioPlusTab(connection),
+                      })
+                      .then(
+                        function (screen) {
+                          (screen.isScreen = !0),
+                            mPeer.onGettingLocalMedia(screen),
+                            (!session.audio && !session.video) ||
                             isAudioPlusTab(connection)
-                            ? gumCallback(screen)
-                            : connection.invokeGetUserMedia(null, function (
+                              ? gumCallback(screen)
+                              : connection.invokeGetUserMedia(null, function (
+                                  stream
+                                ) {
+                                  gumCallback(stream);
+                                });
+                        },
+                        function (error) {
+                          console.error(
+                            "Unable to capture screen on Edge. HTTPs and version 17+ is required."
+                          );
+                        }
+                      )
+                  : connection.invokeGetUserMedia(
+                      {
+                        audio: isAudioPlusTab(connection),
+                        video: !0,
+                        isScreen: !0,
+                      },
+                      function (stream) {
+                        (!session.audio && !session.video) ||
+                        isAudioPlusTab(connection)
+                          ? gumCallback(stream)
+                          : connection.invokeGetUserMedia(null, function (
                               stream
                             ) {
                               gumCallback(stream);
                             });
-                      },
-                      function (error) {
-                        console.error(
-                          "Unable to capture screen on Edge. HTTPs and version 17+ is required."
-                        );
                       }
                     )
-                  : connection.invokeGetUserMedia(
-                    {
-                      audio: isAudioPlusTab(connection),
-                      video: !0,
-                      isScreen: !0,
-                    },
-                    function (stream) {
-                      (!session.audio && !session.video) ||
-                        isAudioPlusTab(connection)
-                        ? gumCallback(stream)
-                        : connection.invokeGetUserMedia(null, function (
-                          stream
-                        ) {
-                          gumCallback(stream);
-                        });
-                    }
-                  )
                 : (session.audio || session.video) &&
-                connection.invokeGetUserMedia(null, gumCallback))
+                  connection.invokeGetUserMedia(null, gumCallback))
             );
       }),
       (connection.invokeGetUserMedia = function (
@@ -4119,7 +4123,7 @@ var RTCMultiConnection = function (roomid, forceOptions) {
       ) {
         session || (session = connection.session),
           localMediaConstraints ||
-          (localMediaConstraints = connection.mediaConstraints),
+            (localMediaConstraints = connection.mediaConstraints),
           getUserMediaHandler({
             onGettingLocalMedia: function (stream) {
               var videoConstraints = localMediaConstraints.video;
@@ -4127,10 +4131,10 @@ var RTCMultiConnection = function (roomid, forceOptions) {
                 (videoConstraints.mediaSource || videoConstraints.mozMediaSource
                   ? (stream.isScreen = !0)
                   : videoConstraints.mandatory &&
-                  videoConstraints.mandatory.chromeMediaSource &&
-                  (stream.isScreen = !0)),
+                    videoConstraints.mandatory.chromeMediaSource &&
+                    (stream.isScreen = !0)),
                 stream.isScreen ||
-                ((stream.isVideo = !!getTracks(stream, "video").length),
+                  ((stream.isVideo = !!getTracks(stream, "video").length),
                   (stream.isAudio =
                     !stream.isVideo && getTracks(stream, "audio").length)),
                 mPeer.onGettingLocalMedia(stream, function () {
@@ -4155,7 +4159,7 @@ var RTCMultiConnection = function (roomid, forceOptions) {
           var stream;
           return (
             connection.streamEvents[streamid] &&
-            (stream = connection.streamEvents[streamid].stream),
+              (stream = connection.streamEvents[streamid].stream),
             void applyConstraints(stream, mediaConstraints)
           );
         }
@@ -4184,7 +4188,7 @@ var RTCMultiConnection = function (roomid, forceOptions) {
         if (session instanceof MediaStream)
           return (
             getTracks(session, "video").length &&
-            replaceTrack(getTracks(session, "video")[0], remoteUserId, !0),
+              replaceTrack(getTracks(session, "video")[0], remoteUserId, !0),
             void (
               getTracks(session, "audio").length &&
               replaceTrack(getTracks(session, "audio")[0], remoteUserId, !1)
@@ -4196,61 +4200,61 @@ var RTCMultiConnection = function (roomid, forceOptions) {
           (session.screen
             ? "Edge" === DetectRTC.browser.name
               ? navigator
-                .getDisplayMedia({
-                  video: !0,
-                  audio: isAudioPlusTab(connection),
-                })
-                .then(
-                  function (screen) {
-                    (screen.isScreen = !0),
-                      mPeer.onGettingLocalMedia(screen),
-                      (!session.audio && !session.video) ||
+                  .getDisplayMedia({
+                    video: !0,
+                    audio: isAudioPlusTab(connection),
+                  })
+                  .then(
+                    function (screen) {
+                      (screen.isScreen = !0),
+                        mPeer.onGettingLocalMedia(screen),
+                        (!session.audio && !session.video) ||
                         isAudioPlusTab(connection)
-                        ? gumCallback(screen)
-                        : connection.invokeGetUserMedia(null, gumCallback);
-                  },
-                  function (error) {
-                    console.error(
-                      "Unable to capture screen on Edge. HTTPs and version 17+ is required."
-                    );
-                  }
-                )
+                          ? gumCallback(screen)
+                          : connection.invokeGetUserMedia(null, gumCallback);
+                    },
+                    function (error) {
+                      console.error(
+                        "Unable to capture screen on Edge. HTTPs and version 17+ is required."
+                      );
+                    }
+                  )
               : connection.invokeGetUserMedia(
-                {
-                  audio: isAudioPlusTab(connection),
-                  video: !0,
-                  isScreen: !0,
-                },
-                (!session.audio && !session.video) ||
-                  isAudioPlusTab(connection)
-                  ? gumCallback
-                  : connection.invokeGetUserMedia(null, gumCallback)
-              )
+                  {
+                    audio: isAudioPlusTab(connection),
+                    video: !0,
+                    isScreen: !0,
+                  },
+                  (!session.audio && !session.video) ||
+                    isAudioPlusTab(connection)
+                    ? gumCallback
+                    : connection.invokeGetUserMedia(null, gumCallback)
+                )
             : (session.audio || session.video) &&
-            connection.invokeGetUserMedia(null, gumCallback));
+              connection.invokeGetUserMedia(null, gumCallback));
       }),
       (connection.resetTrack = function (remoteUsersIds, isVideoTrack) {
         remoteUsersIds || (remoteUsersIds = connection.getAllParticipants()),
           "string" == typeof remoteUsersIds &&
-          (remoteUsersIds = [remoteUsersIds]),
+            (remoteUsersIds = [remoteUsersIds]),
           remoteUsersIds.forEach(function (participant) {
             var peer = connection.peers[participant].peer;
             ("undefined" != typeof isVideoTrack && isVideoTrack !== !0) ||
               !peer.lastVideoTrack ||
               connection.replaceTrack(peer.lastVideoTrack, participant, !0),
               ("undefined" != typeof isVideoTrack && isVideoTrack !== !1) ||
-              !peer.lastAudioTrack ||
-              connection.replaceTrack(peer.lastAudioTrack, participant, !1);
+                !peer.lastAudioTrack ||
+                connection.replaceTrack(peer.lastAudioTrack, participant, !1);
           });
       }),
       (connection.renegotiate = function (remoteUserId) {
         return remoteUserId
           ? void mPeer.renegotiatePeer(remoteUserId)
           : void connection.peers
-            .getAllParticipants()
-            .forEach(function (participant) {
-              mPeer.renegotiatePeer(participant);
-            });
+              .getAllParticipants()
+              .forEach(function (participant) {
+                mPeer.renegotiatePeer(participant);
+              });
       }),
       (connection.setStreamEndHandler = function (stream, isRemote) {
         if (
@@ -4267,7 +4271,7 @@ var RTCMultiConnection = function (roomid, forceOptions) {
                 if (
                   (stream.idInstance &&
                     currentUserMediaRequest.remove(stream.idInstance),
-                    !isRemote)
+                  !isRemote)
                 ) {
                   var streams = [];
                   connection.attachStreams.forEach(function (s) {
@@ -4288,7 +4292,7 @@ var RTCMultiConnection = function (roomid, forceOptions) {
                         ? connection.streamEvents[stream.streamid].mediaElement
                         : null,
                     }),
-                    isRemote && connection.peers[streamEvent.userid])
+                  isRemote && connection.peers[streamEvent.userid])
                 ) {
                   var peer = connection.peers[streamEvent.userid].peer,
                     streams = [];
@@ -4302,8 +4306,8 @@ var RTCMultiConnection = function (roomid, forceOptions) {
                   (connection.peersBackup[streamEvent.userid] &&
                     (streamEvent.extra =
                       connection.peersBackup[streamEvent.userid].extra),
-                    connection.onstreamended(streamEvent),
-                    delete connection.streamEvents[stream.streamid]);
+                  connection.onstreamended(streamEvent),
+                  delete connection.streamEvents[stream.streamid]);
               },
               !1
             );
@@ -4318,9 +4322,9 @@ var RTCMultiConnection = function (roomid, forceOptions) {
       (connection.isInitiator = !1),
       (connection.shareFile = mPeer.shareFile),
       "undefined" != typeof FileProgressBarHandler &&
-      FileProgressBarHandler.handle(connection),
+        FileProgressBarHandler.handle(connection),
       "undefined" != typeof TranslationHandler &&
-      TranslationHandler.handle(connection),
+        TranslationHandler.handle(connection),
       (connection.token = getRandomString),
       (connection.onNewParticipant = function (participantId, userPreferences) {
         connection.acceptParticipationRequest(participantId, userPreferences);
@@ -4331,12 +4335,12 @@ var RTCMultiConnection = function (roomid, forceOptions) {
       ) {
         userPreferences.successCallback &&
           (userPreferences.successCallback(),
-            delete userPreferences.successCallback),
+          delete userPreferences.successCallback),
           mPeer.createNewPeer(participantId, userPreferences);
       }),
       "undefined" != typeof StreamsHandler &&
-      (connection.StreamsHandler = StreamsHandler),
-      (connection.onleave = function (userid) { }),
+        (connection.StreamsHandler = StreamsHandler),
+      (connection.onleave = function (userid) {}),
       (connection.invokeSelectFileDialog = function (callback) {
         var selector = new FileSelector();
         (selector.accept = "*.*"), selector.selectSingleFile(callback);
@@ -4348,13 +4352,13 @@ var RTCMultiConnection = function (roomid, forceOptions) {
             var paused = e.mediaElement.pause();
             "undefined" != typeof paused
               ? paused.then(function () {
-                e.mediaElement.poster =
-                  e.snapshot ||
-                  "https://cdn.webrtc-experiment.com/images/muted.png";
-              })
+                  e.mediaElement.poster =
+                    e.snapshot ||
+                    "https://cdn.webrtc-experiment.com/images/muted.png";
+                })
               : (e.mediaElement.poster =
-                e.snapshot ||
-                "https://cdn.webrtc-experiment.com/images/muted.png");
+                  e.snapshot ||
+                  "https://cdn.webrtc-experiment.com/images/muted.png");
           } else "audio" === e.muteType && (e.mediaElement.muted = !0);
       }),
       (connection.onunmute = function (e) {
@@ -4374,44 +4378,44 @@ var RTCMultiConnection = function (roomid, forceOptions) {
         return connection.peers.getAllParticipants(sender);
       }),
       "undefined" != typeof StreamsHandler &&
-      (StreamsHandler.onSyncNeeded = function (streamid, action, type) {
-        connection.peers.getAllParticipants().forEach(function (participant) {
-          mPeer.onNegotiationNeeded(
-            {
-              streamid: streamid,
-              action: action,
-              streamSyncNeeded: !0,
-              type: type || "both",
-            },
-            participant
-          );
-        });
-      }),
+        (StreamsHandler.onSyncNeeded = function (streamid, action, type) {
+          connection.peers.getAllParticipants().forEach(function (participant) {
+            mPeer.onNegotiationNeeded(
+              {
+                streamid: streamid,
+                action: action,
+                streamSyncNeeded: !0,
+                type: type || "both",
+              },
+              participant
+            );
+          });
+        }),
       (connection.connectSocket = function (callback) {
         connectSocket(callback);
       }),
       (connection.closeSocket = function () {
         try {
           io.sockets = {};
-        } catch (e) { }
+        } catch (e) {}
         connection.socket &&
           ("function" == typeof connection.socket.disconnect &&
             connection.socket.disconnect(),
-            "function" == typeof connection.socket.resetProps &&
+          "function" == typeof connection.socket.resetProps &&
             connection.socket.resetProps(),
-            (connection.socket = null));
+          (connection.socket = null));
       }),
       (connection.getSocket = function (callback) {
         return (
           !callback &&
-          connection.enableLogs &&
-          console.warn("getSocket.callback paramter is required."),
-          (callback = callback || function () { }),
+            connection.enableLogs &&
+            console.warn("getSocket.callback paramter is required."),
+          (callback = callback || function () {}),
           connection.socket
             ? callback(connection.socket)
             : connectSocket(function () {
-              callback(connection.socket);
-            }),
+                callback(connection.socket);
+              }),
           connection.socket
         );
       }),
@@ -4448,8 +4452,8 @@ var RTCMultiConnection = function (roomid, forceOptions) {
                   options.isVideo && event.stream.isVideo && (ignore = !1),
                   options.isAudio && event.stream.isAudio && (ignore = !1),
                   options.userid &&
-                  event.userid === options.userid &&
-                  (ignore = !1),
+                    event.userid === options.userid &&
+                    (ignore = !1),
                   ignore === !1 && streams.push(event);
               }
             }),
@@ -4457,61 +4461,61 @@ var RTCMultiConnection = function (roomid, forceOptions) {
           );
         },
       }),
-        (connection.socketURL = "/"),
-        (connection.socketMessageEvent = "RTCMultiConnection-Message"),
-        (connection.socketCustomEvent = "RTCMultiConnection-Custom-Message"),
-        (connection.DetectRTC = DetectRTC),
-        (connection.setCustomSocketEvent = function (customEvent) {
-          customEvent && (connection.socketCustomEvent = customEvent),
-            connection.socket &&
+      (connection.socketURL = "/"),
+      (connection.socketMessageEvent = "RTCMultiConnection-Message"),
+      (connection.socketCustomEvent = "RTCMultiConnection-Custom-Message"),
+      (connection.DetectRTC = DetectRTC),
+      (connection.setCustomSocketEvent = function (customEvent) {
+        customEvent && (connection.socketCustomEvent = customEvent),
+          connection.socket &&
             connection.socket.emit(
               "set-custom-socket-event-listener",
               connection.socketCustomEvent
             );
-        }),
-        (connection.getNumberOfBroadcastViewers = function (
-          broadcastId,
-          callback
-        ) {
-          connection.socket &&
-            broadcastId &&
-            callback &&
-            connection.socket.emit(
-              "get-number-of-users-in-specific-broadcast",
-              broadcastId,
-              callback
-            );
-        }),
-        (connection.onNumberOfBroadcastViewersUpdated = function (event) {
-          connection.enableLogs &&
-            connection.isInitiator &&
-            console.info(
-              "Number of broadcast (",
-              event.broadcastId,
-              ") viewers",
-              event.numberOfBroadcastViewers
-            );
-        }),
-        (connection.onUserStatusChanged = function (event, dontWriteLogs) {
-          connection.enableLogs &&
-            !dontWriteLogs &&
-            console.info(event.userid, event.status);
-        }),
-        (connection.getUserMediaHandler = getUserMediaHandler),
-        (connection.multiPeersHandler = mPeer),
-        (connection.enableLogs = !0),
-        (connection.setCustomSocketHandler = function (customSocketHandler) {
-          "undefined" != typeof SocketConnection &&
-            (SocketConnection = customSocketHandler);
-        }),
-        (connection.chunkSize = 4e4),
-        (connection.maxParticipantsAllowed = 1e3),
-        (connection.disconnectWith = mPeer.disconnectWith),
-        (connection.checkPresence = function (roomid, callback) {
-          return (
-            (roomid = roomid || connection.sessionid),
-            "SSEConnection" === SocketConnection.name
-              ? void SSEConnection.checkPresence(roomid, function (
+      }),
+      (connection.getNumberOfBroadcastViewers = function (
+        broadcastId,
+        callback
+      ) {
+        connection.socket &&
+          broadcastId &&
+          callback &&
+          connection.socket.emit(
+            "get-number-of-users-in-specific-broadcast",
+            broadcastId,
+            callback
+          );
+      }),
+      (connection.onNumberOfBroadcastViewersUpdated = function (event) {
+        connection.enableLogs &&
+          connection.isInitiator &&
+          console.info(
+            "Number of broadcast (",
+            event.broadcastId,
+            ") viewers",
+            event.numberOfBroadcastViewers
+          );
+      }),
+      (connection.onUserStatusChanged = function (event, dontWriteLogs) {
+        connection.enableLogs &&
+          !dontWriteLogs &&
+          console.info(event.userid, event.status);
+      }),
+      (connection.getUserMediaHandler = getUserMediaHandler),
+      (connection.multiPeersHandler = mPeer),
+      (connection.enableLogs = !0),
+      (connection.setCustomSocketHandler = function (customSocketHandler) {
+        "undefined" != typeof SocketConnection &&
+          (SocketConnection = customSocketHandler);
+      }),
+      (connection.chunkSize = 4e4),
+      (connection.maxParticipantsAllowed = 1e3),
+      (connection.disconnectWith = mPeer.disconnectWith),
+      (connection.checkPresence = function (roomid, callback) {
+        return (
+          (roomid = roomid || connection.sessionid),
+          "SSEConnection" === SocketConnection.name
+            ? void SSEConnection.checkPresence(roomid, function (
                 isRoomExist,
                 _roomid,
                 extra
@@ -4523,88 +4527,88 @@ var RTCMultiConnection = function (roomid, forceOptions) {
                       callback(isRoomExist, _roomid, extra);
                     }));
               })
-              : connection.socket
-                ? void connection.socket.emit(
-                  "check-presence",
-                  roomid + "",
-                  function (isRoomExist, _roomid, extra) {
-                    connection.enableLogs &&
-                      console.log(
-                        "checkPresence.isRoomExist: ",
-                        isRoomExist,
-                        " roomid: ",
-                        _roomid
-                      ),
-                      callback(isRoomExist, _roomid, extra);
-                  }
-                )
-                : void connection.connectSocket(function () {
-                  connection.checkPresence(roomid, callback);
-                })
-          );
-        }),
-        (connection.onReadyForOffer = function (remoteUserId, userPreferences) {
-          connection.multiPeersHandler.createNewPeer(
-            remoteUserId,
-            userPreferences
-          );
-        }),
-        (connection.setUserPreferences = function (userPreferences) {
-          return (
-            connection.dontAttachStream &&
+            : connection.socket
+            ? void connection.socket.emit(
+                "check-presence",
+                roomid + "",
+                function (isRoomExist, _roomid, extra) {
+                  connection.enableLogs &&
+                    console.log(
+                      "checkPresence.isRoomExist: ",
+                      isRoomExist,
+                      " roomid: ",
+                      _roomid
+                    ),
+                    callback(isRoomExist, _roomid, extra);
+                }
+              )
+            : void connection.connectSocket(function () {
+                connection.checkPresence(roomid, callback);
+              })
+        );
+      }),
+      (connection.onReadyForOffer = function (remoteUserId, userPreferences) {
+        connection.multiPeersHandler.createNewPeer(
+          remoteUserId,
+          userPreferences
+        );
+      }),
+      (connection.setUserPreferences = function (userPreferences) {
+        return (
+          connection.dontAttachStream &&
             (userPreferences.dontAttachLocalStream = !0),
-            connection.dontGetRemoteStream &&
+          connection.dontGetRemoteStream &&
             (userPreferences.dontGetRemoteStream = !0),
-            userPreferences
-          );
-        }),
-        (connection.updateExtraData = function () {
-          connection.socket.emit("extra-data-updated", connection.extra);
-        }),
-        (connection.enableScalableBroadcast = !1),
-        (connection.maxRelayLimitPerUser = 3),
-        (connection.dontCaptureUserMedia = !1),
-        (connection.dontAttachStream = !1),
-        (connection.dontGetRemoteStream = !1),
-        (connection.onReConnecting = function (event) {
-          connection.enableLogs &&
-            console.info("ReConnecting with", event.userid, "...");
-        }),
-        (connection.beforeAddingStream = function (stream) {
-          return stream;
-        }),
-        (connection.beforeRemovingStream = function (stream) {
-          return stream;
-        }),
-        "undefined" != typeof isChromeExtensionAvailable &&
+          userPreferences
+        );
+      }),
+      (connection.updateExtraData = function () {
+        connection.socket.emit("extra-data-updated", connection.extra);
+      }),
+      (connection.enableScalableBroadcast = !1),
+      (connection.maxRelayLimitPerUser = 3),
+      (connection.dontCaptureUserMedia = !1),
+      (connection.dontAttachStream = !1),
+      (connection.dontGetRemoteStream = !1),
+      (connection.onReConnecting = function (event) {
+        connection.enableLogs &&
+          console.info("ReConnecting with", event.userid, "...");
+      }),
+      (connection.beforeAddingStream = function (stream) {
+        return stream;
+      }),
+      (connection.beforeRemovingStream = function (stream) {
+        return stream;
+      }),
+      "undefined" != typeof isChromeExtensionAvailable &&
         (connection.checkIfChromeExtensionAvailable = isChromeExtensionAvailable),
-        "undefined" != typeof isFirefoxExtensionAvailable &&
+      "undefined" != typeof isFirefoxExtensionAvailable &&
         (connection.checkIfChromeExtensionAvailable = isFirefoxExtensionAvailable),
-        "undefined" != typeof getChromeExtensionStatus &&
+      "undefined" != typeof getChromeExtensionStatus &&
         (connection.getChromeExtensionStatus = getChromeExtensionStatus),
-        (connection.modifyScreenConstraints = function (screen_constraints) {
-          return screen_constraints;
-        }),
-        (connection.onPeerStateChanged = function (state) {
-          connection.enableLogs &&
-            state.iceConnectionState.search(/closed|failed/gi) !== -1 &&
-            console.error(
-              "Peer connection is closed between you & ",
-              state.userid,
-              state.extra,
-              "state:",
-              state.iceConnectionState
-            );
-        }),
-        (connection.isOnline = !0),
-        listenEventHandler("online", function () {
-          connection.isOnline = !0;
-        }),
-        listenEventHandler("offline", function () {
-          connection.isOnline = !1;
-        }),
-        (connection.isLowBandwidth = !1),
-        navigator &&
+      (connection.modifyScreenConstraints = function (screen_constraints) {
+        return screen_constraints;
+      }),
+      (connection.onPeerStateChanged = function (state) {
+        connection.enableLogs &&
+          state.iceConnectionState.search(/closed|failed/gi) !== -1 &&
+          console.error(
+            "Peer connection is closed between you & ",
+            state.userid,
+            state.extra,
+            "state:",
+            state.iceConnectionState
+          );
+      }),
+      (connection.isOnline = !0),
+      listenEventHandler("online", function () {
+        connection.isOnline = !0;
+      }),
+      listenEventHandler("offline", function () {
+        connection.isOnline = !1;
+      }),
+      (connection.isLowBandwidth = !1),
+      navigator &&
         navigator.connection &&
         navigator.connection.type &&
         ((connection.isLowBandwidth =
@@ -4612,11 +4616,11 @@ var RTCMultiConnection = function (roomid, forceOptions) {
             .toString()
             .toLowerCase()
             .search(/wifi|cell/g) !== -1),
-          connection.isLowBandwidth))
+        connection.isLowBandwidth))
     ) {
       if (
         ((connection.bandwidth = { audio: !1, video: !1, screen: !1 }),
-          connection.mediaConstraints.audio &&
+        connection.mediaConstraints.audio &&
           connection.mediaConstraints.audio.optional &&
           connection.mediaConstraints.audio.optional.length)
       ) {
@@ -4642,20 +4646,20 @@ var RTCMultiConnection = function (roomid, forceOptions) {
       if (!remoteUserId) throw "remoteUserId is required.";
       return "function" == typeof callback
         ? void connection.socket.emit(
-          "get-remote-user-extra-data",
-          remoteUserId,
-          function (extra, remoteUserId, error) {
-            callback(extra, remoteUserId, error);
-          }
-        )
+            "get-remote-user-extra-data",
+            remoteUserId,
+            function (extra, remoteUserId, error) {
+              callback(extra, remoteUserId, error);
+            }
+          )
         : connection.peers[remoteUserId]
-          ? connection.peers[remoteUserId].extra
-          : connection.peersBackup[remoteUserId]
-            ? connection.peersBackup[remoteUserId].extra
-            : {};
+        ? connection.peers[remoteUserId].extra
+        : connection.peersBackup[remoteUserId]
+        ? connection.peersBackup[remoteUserId].extra
+        : {};
     }),
       forceOptions.autoOpenOrJoin &&
-      connection.openOrJoin(connection.sessionid),
+        connection.openOrJoin(connection.sessionid),
       (connection.onUserIdAlreadyTaken = function (
         useridAlreadyTaken,
         yourNewUserId
@@ -4666,12 +4670,12 @@ var RTCMultiConnection = function (roomid, forceOptions) {
           (connection.userid = connection.token()),
           connection.join(connection.sessionid),
           connection.enableLogs &&
-          console.warn(
-            "Userid already taken.",
-            useridAlreadyTaken,
-            "Your new userid:",
-            connection.userid
-          );
+            console.warn(
+              "Userid already taken.",
+              useridAlreadyTaken,
+              "Your new userid:",
+              connection.userid
+            );
       }),
       (connection.trickleIce = !0),
       (connection.version = "3.6.9"),
@@ -4691,7 +4695,7 @@ var RTCMultiConnection = function (roomid, forceOptions) {
       (connection.autoCreateMediaElement = !0),
       (connection.password = null),
       (connection.setPassword = function (password, callback) {
-        (callback = callback || function () { }),
+        (callback = callback || function () {}),
           connection.socket
             ? connection.socket.emit("set-password", password, callback)
             : ((connection.password = password),
@@ -4718,7 +4722,7 @@ var RTCMultiConnection = function (roomid, forceOptions) {
 };
 "undefined" != typeof module && (module.exports = exports = RTCMultiConnection),
   "function" == typeof define &&
-  define.amd &&
-  define("RTCMultiConnection", [], function () {
-    return RTCMultiConnection;
-  });
+    define.amd &&
+    define("RTCMultiConnection", [], function () {
+      return RTCMultiConnection;
+    });
