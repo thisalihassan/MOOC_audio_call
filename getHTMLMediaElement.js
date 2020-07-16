@@ -461,6 +461,7 @@ function getAudioElement(mediaElement, config) {
   };
   var full = document.createElement("div");
   var h2 = document.createElement("h2");
+  h2.className = "media-box";
   h2.innerHTML = config.title || "Audio Element";
   h2.setAttribute(
     "style",
