@@ -459,16 +459,17 @@ function getAudioElement(mediaElement, config) {
   config.toggle.has = function (element) {
     return config.toggle.indexOf(element) !== -1;
   };
-
-  var mediaElementContainer = document.createElement("div");
-  mediaElementContainer.className = "media-container";
+  var full = document.createElement("div");
   var h2 = document.createElement("h2");
   h2.innerHTML = config.title || "Audio Element";
   h2.setAttribute(
     "style",
     "position: absolute;color: rgb(160, 160, 160);font-size: 20px;text-shadow: 1px 1px rgb(255, 255, 255);padding:0;margin:0;"
   );
-  mediaElementContainer.appendChild(h2);
+  full.appendChild(h2);
+
+  mediaElementContainer.className = "media-container";
+
   var mediaControls = document.createElement("div");
   mediaControls.className = "media-controls";
   mediaElementContainer.appendChild(mediaControls);
@@ -576,10 +577,6 @@ function getAudioElement(mediaElement, config) {
   mediaElementContainer.style.width = "329px";
   mediaBox.style.height = "90px";
 
-  h2.style.width = mediaElementContainer.style.width;
-  h2.style.height = "50px";
-  h2.style.overflow = "hidden";
-
   var times = 0;
 
   function adjustControls() {
@@ -635,6 +632,6 @@ function getAudioElement(mediaElement, config) {
   };
 
   mediaElementContainer.media = mediaElement;
-
-  return mediaElementContainer;
+  full.appendChild(mediaElementContainer);
+  return full;
 }
