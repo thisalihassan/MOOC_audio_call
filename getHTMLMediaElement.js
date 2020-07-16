@@ -467,7 +467,7 @@ function getAudioElement(mediaElement, config) {
     "position: absolute;color: rgb(160, 160, 160);font-size: 20px;text-shadow: 1px 1px rgb(255, 255, 255);padding:0;margin:0;"
   );
   full.appendChild(h2);
-
+  var mediaElementContainer = document.createElement("div");
   mediaElementContainer.className = "media-container";
 
   var mediaControls = document.createElement("div");
